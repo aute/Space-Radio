@@ -3,6 +3,8 @@ import screenfull from "screenfull";
 import "./App.css";
 import { GetDistance } from "./utils";
 
+import ForecastBoard from "./components/ForecastBoard";
+
 // eslint-disable-next-line
 const geolocation = new qq.maps.Geolocation(
   "MPFBZ-TPZW4-AWOU3-XG2RL-3VE47-MSFIE",
@@ -18,7 +20,7 @@ class App extends Component {
       loca_lng: 0,
       iss_lat: 0,
       iss_lng: 0,
-      distance: ''
+      distance: ""
     };
   }
   componentDidMount() {
@@ -55,16 +57,14 @@ class App extends Component {
             iss_lng: data.iss_position.longitude
           },
           () => {
-            this.setState(
-              {
-                distance: GetDistance(
-                  this.state.loca_lat,
-                  this.state.loca_lng,
-                  this.state.iss_lat,
-                  this.state.iss_lng,
-                )
-              }
-            )
+            this.setState({
+              distance: GetDistance(
+                this.state.loca_lat,
+                this.state.loca_lng,
+                this.state.iss_lat,
+                this.state.iss_lng
+              )
+            });
           }
         );
       });
@@ -79,11 +79,13 @@ class App extends Component {
   };
   render() {
     return (
-      <div className={["App", `sky-gradient-${this.state.hour}`].join(" ")} ref="App">
+      <div
+        className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
+        ref="App"
+      >
         <div className="container" onDoubleClick={this.screenfullSwitch}>
-          <h1>
-            {this.state.distance}
-          </h1>
+          <div />
+          <ForecastBoard distance={Math.round(this.state.distance)} />
         </div>
       </div>
     );
