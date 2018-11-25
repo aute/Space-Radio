@@ -47,7 +47,7 @@ class App extends Component {
     });
   };
   getIssPosition = () => {
-    fetch("http://api.open-notify.org/iss-now.json").then(res => {
+    fetch("//api.open-notify.org/iss-now.json").then(res => {
       res.json().then(data => {
         this.setState(
           {
