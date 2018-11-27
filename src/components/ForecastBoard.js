@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment"
 import "./ForecastBoard.css";
 
 class ForecastBoard extends Component {
@@ -11,6 +12,7 @@ class ForecastBoard extends Component {
     return (
       <div className="ForecastBoard">
         <h1 className="ForecastTitle">{this.props.distance} KM</h1>
+        <h2 className="ForecastSubTitle">NEXT &nbsp;ISS &nbsp;PASS &nbsp;{moment(new Date(this.props.risetime)).format('HH:mm:ssA')} ∇</h2>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import screenfull from "screenfull";
+import fetchJsonp from "fetch-jsonp";
 import "./App.css";
 import { GetDistance } from "./utils";
 
@@ -20,7 +21,9 @@ class App extends Component {
       loca_lng: 0,
       iss_lat: 0,
       iss_lng: 0,
-      distance: ""
+      distance: 0,
+      risetime: 0,
+      duration: 0
     };
   }
   componentDidMount() {
@@ -32,6 +35,7 @@ class App extends Component {
     }, 1000 * 60 * 60);
     this.getIssPosition_timer = setInterval(() => {
       this.getIssPosition();
+      this.getIssPass();
     }, 1000);
   }
   getHour = () => {
@@ -70,6 +74,20 @@ class App extends Component {
       });
     });
   };
+  getIssPass = () => {
+    fetchJsonp(
+      `http://api.open-notify.org/iss-pass.json?lat=${
+        this.state.loca_lat
+      }&lon=${this.state.loca_lng}&`
+    ).then(res => {
+      res.json().then(data => {
+        this.setState({
+          duration: data.response[0].duration,
+          risetime: data.response[0].risetime * 1000
+        });
+      });
+    });
+  };
   screenfullSwitch = () => {
     if (screenfull.enabled) {
       screenfull.toggle(this.refs.App);
@@ -85,7 +103,11 @@ class App extends Component {
       >
         <div className="container" onDoubleClick={this.screenfullSwitch}>
           <div />
-          <ForecastBoard distance={Math.round(this.state.distance)} />
+          <ForecastBoard
+            distance={Math.round(this.state.distance)}
+            duration={this.state.duration}
+            risetime={this.state.risetime}
+          />
         </div>
       </div>
     );
