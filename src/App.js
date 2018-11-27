@@ -37,7 +37,7 @@ class App extends Component {
   getHour = () => {
     let now = new Date();
     this.setState({
-      hour: now.getMinutes() > 50 ? now.getHours() + 1 : now.getHours()
+      hour: now.getMinutes() > 10 ? now.getHours() + 1 : now.getHours()
     });
   };
   getLoca = () => {
