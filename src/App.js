@@ -34,8 +34,10 @@ class App extends Component {
       this.getHour();
     }, 1000 * 60 * 60);
     this.getIssPosition_timer = setInterval(() => {
-      this.getIssPosition();
-      this.getIssPass();
+      this.getIssPosition()
+      if (this.state.risetime - new Date < 0) {
+        this.getIssPass();
+      }
     }, 1000);
   }
   getHour = () => {
@@ -101,8 +103,8 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <div class="circle-container">
-          <div class="circle" />
+        <div className="circle-container">
+          <div className="circle" />
         </div>
         <div className="container" onDoubleClick={this.screenfullSwitch}>
           <div />
