@@ -12,6 +12,7 @@
   width: 100%;
   height: 100vh;
 }
+
 .container {
   z-index: 1;
   position: absolute;
@@ -21,6 +22,7 @@
   justify-content: space-between;
   padding: 20px;
 }
+
 @keyframes next_odd {
   from {
     opacity: 0;
@@ -80,7 +82,7 @@
 .sky-gradient-24:after,
 .sky-gradient-0,
 .sky-gradient-0:after,
-.sky-gradient-1{
+.sky-gradient-1 {
   background: linear-gradient(to bottom, #0E104F 20%, #2738A2 100%);
 }
 
@@ -89,7 +91,7 @@
 .sky-gradient-2:after,
 .sky-gradient-3,
 .sky-gradient-3:after,
-.sky-gradient-4{
+.sky-gradient-4 {
   background: linear-gradient(to bottom, #0F2372 20%, #942D45 100%);
 }
 
@@ -98,7 +100,7 @@
 .sky-gradient-5:after,
 .sky-gradient-6,
 .sky-gradient-6:after,
-.sky-gradient-7{
+.sky-gradient-7 {
   background: linear-gradient(to bottom, #252B8D 0%, #C779B7 100%);
 }
 
@@ -107,7 +109,7 @@
 .sky-gradient-8:after,
 .sky-gradient-9,
 .sky-gradient-9:after,
-.sky-gradient-10{
+.sky-gradient-10 {
   background: linear-gradient(to bottom, #3383E0 20%, #D6A3C4 100%);
 }
 
@@ -116,7 +118,7 @@
 .sky-gradient-11:after,
 .sky-gradient-12,
 .sky-gradient-12:after,
-.sky-gradient-13{
+.sky-gradient-13 {
   background: linear-gradient(to bottom, #398CDF 0%, #77D7FD 100%);
 }
 
@@ -125,7 +127,7 @@
 .sky-gradient-14:after,
 .sky-gradient-15,
 .sky-gradient-15:after,
-.sky-gradient-16{
+.sky-gradient-16 {
   background: linear-gradient(to bottom, #348CEC 20%, #D9DBCA 100%);
 }
 
@@ -134,7 +136,7 @@
 .sky-gradient-17:after,
 .sky-gradient-18,
 .sky-gradient-18:after,
-.sky-gradient-19{
+.sky-gradient-19 {
   background: linear-gradient(to bottom, #1B58CA 0%, #F3B284 100%);
 }
 
@@ -143,6 +145,73 @@
 .sky-gradient-20:after,
 .sky-gradient-21,
 .sky-gradient-21:after,
-.sky-gradient-22{
+.sky-gradient-22 {
   background: linear-gradient(to bottom, #081460 20%, #813B0E 100%);
+}
+
+.circle-container {
+  position: absolute;
+  transform: translateY(-10vh);
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.circle-container .circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  background-image: radial-gradient(#fff, #fff 10%, rgba(255, 245, 153, 0) 56%);
+  animation: fadein-frames 200ms infinite, scale-frames 5s infinite;
+}
+
+@keyframes fade-frames {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-frames {
+  0% {
+    transform: scale3d(0.4, 0.4, 1);
+  }
+
+  50% {
+    transform: scale3d(2.2, 2.2, 1);
+  }
+
+  100% {
+    transform: scale3d(0.4, 0.4, 1);
+  }
+}
+
+.circle-container {
+  width: 10px;
+  height: 10px;
+  animation-name: move-frames;
+  animation-duration: 8441ms;
+  animation-delay: 4544ms;
+}
+
+@keyframes move-frames {
+  from {
+    transform: translate3d(50vw, 102vh, 0);
+  }
+
+  to {
+    transform: translate3d(2vw, -117vh, 0);
+  }
+}
+
+.circle-container .circle {
+  -webkit-animation-delay: 3734ms;
+  animation-delay: 3734ms;
 }

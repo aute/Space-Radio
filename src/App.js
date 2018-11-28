@@ -101,6 +101,9 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
+        <div class="circle-container">
+          <div class="circle" />
+        </div>
         <div className="container" onDoubleClick={this.screenfullSwitch}>
           <div />
           <ForecastBoard
