@@ -153,15 +153,18 @@
   z-index: 3;
   position: absolute;
 }
+
 .circle-container .circle {
   display: none;
 }
-.passing.circle-container  {
+
+.passing.circle-container {
   width: 10px;
   height: 10px;
   animation-iteration-count: 1;
   animation-name: move-frames;
 }
+
 .passing.circle-container .circle {
   display: block;
   width: 100%;
@@ -169,10 +172,11 @@
   border-radius: 50%;
   mix-blend-mode: screen;
   background-image: radial-gradient(#fff, #fff 10%, rgba(227, 254, 255, 0) 56%);
-  animation-name: fadein-frames, scale-frames;
+  animation-iteration-count: infinite, 1;
+  animation-name: fade-frames, scale-frames;
 }
 
-@keyframes fadein-frames {
+@keyframes fade-frames {
   0% {
     opacity: 1;
   }
