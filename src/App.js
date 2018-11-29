@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
 import "./App.css";
-import { GetDistance } from "./utils";
+import { GetDistance, getRule } from "./utils";
 
 import ForecastBoard from "./components/ForecastBoard";
 
@@ -23,7 +23,8 @@ class App extends Component {
       iss_lng: 0,
       distance: 0,
       risetime: 0,
-      duration: 0
+      duration: 0,
+      passing: false
     };
   }
   componentDidMount() {
@@ -34,9 +35,12 @@ class App extends Component {
       this.getHour();
     }, 1000 * 60 * 60);
     this.getIssPosition_timer = setInterval(() => {
-      this.getIssPosition()
-      if (this.state.risetime - new Date < 0) {
-        this.getIssPass();
+      this.getIssPosition();
+      if (this.state.risetime - new Date() < 0) {
+        if (!this.state.passing) {
+          this.animationStart(this.state.duration)
+        }
+        this.getIssPass()
       }
     }, 1000);
   }
@@ -83,6 +87,7 @@ class App extends Component {
       }&lon=${this.state.loca_lng}&`
     ).then(res => {
       res.json().then(data => {
+        let a = new Date
         this.setState({
           duration: data.response[0].duration,
           risetime: data.response[0].risetime * 1000
@@ -97,14 +102,29 @@ class App extends Component {
       alert("screen full error");
     }
   };
+  animationStart = duration => {
+    this.setState({
+      passing: true
+    })
+    let durationTimer = setInterval(() => {
+      if (duration > 1) {
+        duration -- 
+      } else {
+        this.setState({
+          passing: false
+        })
+        clearInterval(durationTimer)
+      }
+    }, 1000);
+  };
   render() {
     return (
       <div
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <div className="circle-container">
-          <div className="circle" />
+        <div className={["circle-container", this.state.passing ? 'passing':''].join(" ")} style={{ animationDuration: `${this.state.duration}s` }}>
+          <div className="circle" style={{ animationDuration: `6s,${this.state.duration}s` }}/>
         </div>
         <div className="container" onDoubleClick={this.screenfullSwitch}>
           <div />
