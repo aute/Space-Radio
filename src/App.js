@@ -87,7 +87,6 @@ class App extends Component {
       }&lon=${this.state.loca_lng}&`
     ).then(res => {
       res.json().then(data => {
-        let a = new Date
         this.setState({
           duration: data.response[0].duration,
           risetime: data.response[0].risetime * 1000
