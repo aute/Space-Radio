@@ -24,6 +24,7 @@ class App extends Component {
       distance: 0,
       risetime: 0,
       duration: 0,
+      currentDuration:0,
       passing: false
     };
   }
@@ -38,9 +39,9 @@ class App extends Component {
       this.getIssPosition();
       if (this.state.risetime - new Date() < 0) {
         if (!this.state.passing) {
-          this.animationStart(this.state.duration)
+          this.animationStart(this.state.duration);
         }
-        this.getIssPass()
+        this.getIssPass();
       }
     }, 1000);
   }
@@ -84,12 +85,14 @@ class App extends Component {
     fetchJsonp(
       `http://api.open-notify.org/iss-pass.json?lat=${
         this.state.loca_lat
-      }&lon=${this.state.loca_lng}&`
+      }&lon=${
+        this.state.loca_lng
+      }&`
     ).then(res => {
       res.json().then(data => {
         this.setState({
           duration: data.response[0].duration,
-          risetime: data.response[0].risetime * 1000
+          risetime: data.response[0].risetime * 1000,
         });
       });
     });
@@ -103,16 +106,18 @@ class App extends Component {
   };
   animationStart = duration => {
     this.setState({
-      passing: true
-    })
+      passing: true,
+      currentDuration: duration,
+    });
     let durationTimer = setInterval(() => {
       if (duration > 1) {
-        duration -- 
+        duration--;
       } else {
         this.setState({
-          passing: false
-        })
-        clearInterval(durationTimer)
+          passing: false,
+          currentDuration: 0,
+        });
+        clearInterval(durationTimer);
       }
     }, 1000);
   };
@@ -122,8 +127,17 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <div className={["circle-container", this.state.passing ? 'passing':''].join(" ")} style={{ animationDuration: `${this.state.duration}s` }}>
-          <div className="circle" style={{ animationDuration: `6s,${this.state.duration}s` }}/>
+        <div
+          className={[
+            "circle-container",
+            this.state.passing ? "passing" : ""
+          ].join(" ")}
+          style={{ animationDuration: `${this.state.currentDuration}s` }}
+        >
+          <div
+            className="circle"
+            style={{ animationDuration: `6s,${this.state.currentDuration}s` }}
+          />
         </div>
         <div className="container" onDoubleClick={this.screenfullSwitch}>
           <div />
