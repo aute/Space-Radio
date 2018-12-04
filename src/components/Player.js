@@ -12,7 +12,7 @@ export default class Player extends Component {
       this.audioStart()
     }
     if (prevProps.distance !== this.props.distance) {
-      let volume = 2500 - this.props.distance > 1 ? (this.props.distance / 2500) * (this.props.distance / 2500) : 1
+      let volume = 2400 - this.props.distance > 1 ? (this.props.distance / 2400) * (this.props.distance / 2400) * (this.props.distance / 2400) * (this.props.distance / 2400) : 1
       volume = volume * 0.05
       this.backgroundAudio_main.volume = volume
     }
