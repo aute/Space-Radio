@@ -5,6 +5,7 @@ import "./App.css";
 import { GetDistance, getRule } from "./utils";
 
 import ForecastBoard from "./components/ForecastBoard";
+import Player from "./components/Player.js";
 
 // eslint-disable-next-line
 const geolocation = new qq.maps.Geolocation(
@@ -24,8 +25,9 @@ class App extends Component {
       distance: 0,
       risetime: 0,
       duration: 0,
-      currentDuration:0,
-      passing: false
+      currentDuration: 0,
+      passing: false,
+      audioStart: false
     };
   }
   componentDidMount() {
@@ -85,19 +87,20 @@ class App extends Component {
     fetchJsonp(
       `http://api.open-notify.org/iss-pass.json?lat=${
         this.state.loca_lat
-      }&lon=${
-        this.state.loca_lng
-      }&`
+      }&lon=${this.state.loca_lng}&`
     ).then(res => {
       res.json().then(data => {
         this.setState({
           duration: data.response[0].duration,
-          risetime: data.response[0].risetime * 1000,
+          risetime: data.response[0].risetime * 1000
         });
       });
     });
   };
-  screenfullSwitch = () => {
+  start = () => {
+    this.setState({
+      audioStart: true,
+    });
     if (screenfull.enabled) {
       screenfull.toggle(this.refs.App);
     } else {
@@ -107,7 +110,7 @@ class App extends Component {
   animationStart = duration => {
     this.setState({
       passing: true,
-      currentDuration: duration,
+      currentDuration: duration
     });
     let durationTimer = setInterval(() => {
       if (duration > 1) {
@@ -115,7 +118,7 @@ class App extends Component {
       } else {
         this.setState({
           passing: false,
-          currentDuration: 0,
+          currentDuration: 0
         });
         clearInterval(durationTimer);
       }
@@ -139,7 +142,11 @@ class App extends Component {
             style={{ animationDuration: `6s,${this.state.currentDuration}s` }}
           />
         </div>
-        <div className="container" onDoubleClick={this.screenfullSwitch}>
+        <Player
+          distance={Math.round(this.state.distance)}
+          audioStar={this.state.audioStart}
+        />
+        <div className="container" onDoubleClick={this.start}>
           <div />
           <ForecastBoard
             distance={Math.round(this.state.distance)}
