@@ -16,15 +16,3 @@ export const GetDistance = (lat1, lng1, lat2, lng2) => {
   return s;
 };
 
-export const getRule = (name) => {
-  let rule;
-  let ss = document.styleSheets;
-  for (let i = 0; i < ss.length; ++i) {
-    for (let x = 0; x < ss[i].cssRules.length; ++x) {
-      rule = ss[i].cssRules[x];
-      if (rule.name === name && rule.type === CSSRule.KEYFRAMES_RULE) {
-        return rule
-      }
-    }
-  }
-};
