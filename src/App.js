@@ -22,7 +22,7 @@ class App extends Component {
       loca_lng: 0,
       iss_lat: 0,
       iss_lng: 0,
-      distance: 2800,
+      distance: 0,
       risetime: 0,
       duration: 0,
       currentDuration: 0,
@@ -72,13 +72,12 @@ class App extends Component {
           () => {
             this.setState({
               distance:
-                this.state.distance - 17
-              //   GetDistance(
-              //   this.state.loca_lat,
-              //   this.state.loca_lng,
-              //   this.state.iss_lat,
-              //   this.state.iss_lng
-              // )
+                GetDistance(
+                this.state.loca_lat,
+                this.state.loca_lng,
+                this.state.iss_lat,
+                this.state.iss_lng
+              )
             });
           }
         );

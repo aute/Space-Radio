@@ -53,14 +53,14 @@ export default class Player extends Component {
     return (
       <div>
         <audio
-          src={"/1.mp3"}
+          src={"./1.mp3"}
           ref={node => {
             this.audio = node;
           }}
           loop
         />
         <audio
-          src={"/b.mp3"}
+          src={"./b.mp3"}
           ref={node => {
             this.backgroundAudio_main = node;
           }}
