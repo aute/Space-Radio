@@ -4,29 +4,39 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      audioStar: false
+      audioStar: false,
+      markDistance: 2200
     };
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.audioStar !== this.props.audioStar && this.props.audioStar) {
+    let p_audioStar = prevProps.audioStar
+    let c_audioStar = this.props.audioStar
+    let p_distance = prevProps.distance
+    let c_distance = this.props.distance
+    let markDistance = this.state.markDistance
+
+    if (p_audioStar !== c_audioStar && c_audioStar) {
       this.audioStart();
     }
-    if (!(2400 - prevProps.distance > 0) && 2400 - this.props.distance > 0) {
+
+    if (!(markDistance - p_distance > 0) && markDistance - c_distance > 0) {
       this.audio.play()
     }
-    if (2400 - prevProps.distance > 0 && !(2400 - this.props.distance > 0)) {
+
+    if (markDistance - p_distance > 0 && !(markDistance - c_distance > 0)) {
       this.audio.pause()
     }
-    if (prevProps.distance !== this.props.distance) {
+
+    if (prevProps.distance !== c_distance) {
       let backgroundAudioVolume =
-        2400 - this.props.distance > 0
-          ? Math.pow(this.props.distance / 2400, 4)
+        markDistance - c_distance > 0
+          ? Math.pow(c_distance / markDistance, 4)
           : 1;
-      backgroundAudioVolume = backgroundAudioVolume * 0.05;
+      backgroundAudioVolume = backgroundAudioVolume * 0.2;
 
       let audioVolume =
-      2400 - this.props.distance > 0
-        ? 1 - Math.pow(this.props.distance / 2400, 2)
+      markDistance - c_distance > 0
+        ? 1 - Math.pow(c_distance / markDistance, 2)
         : 0;
 
       this.backgroundAudio_main.volume = backgroundAudioVolume;
@@ -34,7 +44,7 @@ export default class Player extends Component {
     }
   }
   componentDidMount() {
-    this.backgroundAudio_main.volume = 0.05;
+    this.backgroundAudio_main.volume = 0.2;
   }
   audioStart = () => {
     this.backgroundAudio_main.play();
@@ -50,7 +60,7 @@ export default class Player extends Component {
           loop
         />
         <audio
-          src={"/Pinknoise.mp3"}
+          src={"/b.mp3"}
           ref={node => {
             this.backgroundAudio_main = node;
           }}
