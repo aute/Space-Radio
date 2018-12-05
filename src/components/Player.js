@@ -11,13 +11,26 @@ export default class Player extends Component {
     if (prevProps.audioStar !== this.props.audioStar && this.props.audioStar) {
       this.audioStart();
     }
+    if (!(2400 - prevProps.distance > 0) && 2400 - this.props.distance > 0) {
+      this.audio.play()
+    }
+    if (2400 - prevProps.distance > 0 && !(2400 - this.props.distance > 0)) {
+      this.audio.pause()
+    }
     if (prevProps.distance !== this.props.distance) {
-      let volume =
-        2400 - this.props.distance > 1
-          ? Math.pow((this.props.distance / 2400),4)
+      let backgroundAudioVolume =
+        2400 - this.props.distance > 0
+          ? Math.pow(this.props.distance / 2400, 4)
           : 1;
-      volume = volume * 0.05;
-      this.backgroundAudio_main.volume = volume;
+      backgroundAudioVolume = backgroundAudioVolume * 0.05;
+
+      let audioVolume =
+      2400 - this.props.distance > 0
+        ? 1 - Math.pow(this.props.distance / 2400, 2)
+        : 0;
+
+      this.backgroundAudio_main.volume = backgroundAudioVolume;
+      this.audio.volume = audioVolume;
     }
   }
   componentDidMount() {
@@ -27,18 +40,16 @@ export default class Player extends Component {
     this.backgroundAudio_main.play();
   };
   render() {
-    return [
+    return (
       <div>
         <audio
-          key="audio"
-          src={"/Pinknoise.mp3"}
+          src={"/1.mp3"}
           ref={node => {
             this.audio = node;
           }}
           loop
         />
         <audio
-          key="backgroundAudio_main"
           src={"/Pinknoise.mp3"}
           ref={node => {
             this.backgroundAudio_main = node;
@@ -46,6 +57,6 @@ export default class Player extends Component {
           loop
         />
       </div>
-    ];
+    )
   }
 }

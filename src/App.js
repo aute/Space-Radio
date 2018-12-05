@@ -71,7 +71,9 @@ class App extends Component {
           },
           () => {
             this.setState({
-              distance: GetDistance(
+              distance:
+                //this.state.distance - 17
+                GetDistance(
                 this.state.loca_lat,
                 this.state.loca_lng,
                 this.state.iss_lat,
@@ -99,7 +101,7 @@ class App extends Component {
   };
   start = () => {
     this.setState({
-      audioStart: true,
+      audioStart: true
     });
     if (screenfull.enabled) {
       screenfull.toggle(this.refs.App);
