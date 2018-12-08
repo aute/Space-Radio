@@ -11,8 +11,8 @@ class ForecastBoard extends Component {
   render() {
     return (
       <div className="ForecastBoard">
-        <h1 className="ForecastTitle">{this.props.distance} KM</h1>
-        <h2 className="ForecastSubTitle">NEXT &nbsp;ISS &nbsp;PASS &nbsp;{moment(new Date(this.props.risetime)).format('hh:mm:ss A')} ∇</h2>
+        <h1 className="ForecastTitle">{this.props.distance}<br/>KM</h1>
+        <h2 className="ForecastSubTitle">NEXT &nbsp;ISS &nbsp;PASS<br/> &nbsp;{moment(new Date(this.props.risetime)).format('hh:mm:ss A')} ∇</h2>
       </div>
     );
   }

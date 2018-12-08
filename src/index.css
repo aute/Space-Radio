@@ -1,3 +1,13 @@
+@media screen and (min-width: 360px) and (max-width: 680px) {
+  body {
+    font-size: 8px;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  body {
+    font-size: 6px;
+  }
+}
 body {
   margin: 0;
   padding: 0;

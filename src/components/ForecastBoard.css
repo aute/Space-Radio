@@ -1,14 +1,17 @@
 .ForecastBoard {
   color: #fff;
 }
+
 .ForecastTitle {
-  font-size: 6em;
-  margin-block-start: 0.2em;
-  margin-block-end: 0.2em;
+  font-size: 12em;
+  line-height: 100%;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
   text-align: end
 }
+
 .ForecastSubTitle {
-  font-size: 1.6em;
+  font-size: 4em;
   margin-block-start: 0.2em;
   margin-block-end: 0.2em;
   text-align: end
