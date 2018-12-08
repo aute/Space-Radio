@@ -16,3 +16,9 @@ export const GetDistance = (lat1, lng1, lat2, lng2) => {
   return s;
 };
 
+export const GetISSDistance = (lat1, lng1, lat2, lng2) => {
+  let a = GetDistance(lat1, lng1, lat2, lng2)
+  let b = 350
+  return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+};
+

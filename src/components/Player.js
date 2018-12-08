@@ -5,29 +5,46 @@ export default class Player extends Component {
     super(props);
     this.state = {
       audioStar: false,
-      markDistance: 2200
+      markDistance: 2200,
     };
   }
   componentDidUpdate(prevProps) {
-    let p_audioStar = prevProps.audioStar
-    let c_audioStar = this.props.audioStar
-    let p_distance = prevProps.distance
-    let c_distance = this.props.distance
-    let markDistance = this.state.markDistance
-
+    this.audioController(
+      prevProps.audioStar,
+      this.props.audioStar,
+      prevProps.distance,
+      this.props.distance,
+      this.state.markDistance
+    );
+  }
+  componentDidMount() {
+    this.setBackgroundAudioVolume(0.2)
+  }
+  audioStart = () => {
+    this.audio.play();
+    this.backgroundAudio_main.play();
+    this.backgroundAudio_paint.play();
+    setInterval(() => {
+      let currentTime = Math.ceil(Math.random() * (this.backgroundAudio_paint.duration - 5))
+      this.backgroundAudio_paint.currentTime = currentTime
+    }, 1000 * 5);
+  };
+  setBackgroundAudioVolume = (value) => {
+    this.backgroundAudio_main.volume = value;
+    this.backgroundAudio_paint.volume = value;
+  }
+  audioController = (
+    p_audioStar,
+    c_audioStar,
+    p_distance,
+    c_distance,
+    markDistance,
+  ) => {
     if (p_audioStar !== c_audioStar && c_audioStar) {
       this.audioStart();
     }
 
-    if (!(markDistance - p_distance > 0) && markDistance - c_distance > 0) {
-      this.audio.play()
-    }
-
-    if (markDistance - p_distance > 0 && !(markDistance - c_distance > 0)) {
-      this.audio.pause()
-    }
-
-    if (prevProps.distance !== c_distance) {
+    if (p_distance !== c_distance) {
       let backgroundAudioVolume =
         markDistance - c_distance > 0
           ? Math.pow(c_distance / markDistance, 4)
@@ -35,19 +52,13 @@ export default class Player extends Component {
       backgroundAudioVolume = backgroundAudioVolume * 0.2;
 
       let audioVolume =
-      markDistance - c_distance > 0
-        ? 1 - Math.pow(c_distance / markDistance, 2)
-        : 0;
-
-      this.backgroundAudio_main.volume = backgroundAudioVolume;
+        markDistance - c_distance > 0
+          ? 1 - Math.pow(c_distance / markDistance, 2)
+          : 0;
+      
+      this.setBackgroundAudioVolume(backgroundAudioVolume)
       this.audio.volume = audioVolume;
     }
-  }
-  componentDidMount() {
-    this.backgroundAudio_main.volume = 0.2;
-  }
-  audioStart = () => {
-    this.backgroundAudio_main.play();
   };
   render() {
     return (
@@ -66,7 +77,14 @@ export default class Player extends Component {
           }}
           loop
         />
+        <audio
+          src={"./b.mp3"}
+          ref={node => {
+            this.backgroundAudio_paint = node;
+          }}
+          loop
+        />
       </div>
-    )
+    );
   }
 }

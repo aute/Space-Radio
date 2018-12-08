@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
 import "./App.css";
-import { GetDistance } from "./utils";
+import { GetISSDistance } from "./utils";
 
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player.js";
@@ -72,7 +72,7 @@ class App extends Component {
           () => {
             this.setState({
               distance:
-                GetDistance(
+              GetISSDistance(
                 this.state.loca_lat,
                 this.state.loca_lng,
                 this.state.iss_lat,
