@@ -44,18 +44,20 @@ export default class Player extends Component {
       this.audioStart();
     }
 
-    if (p_distance !== c_distance) {
-      let backgroundAudioVolume =
-        markDistance - c_distance > 0
-          ? Math.pow(c_distance / markDistance, 4)
-          : 1;
+    if (p_distance !== c_distance && markDistance - c_distance > 0) {
+      let backgroundAudioVolume =  Math.pow(c_distance / markDistance, 4)
       backgroundAudioVolume = backgroundAudioVolume * 0.2;
+      let audioVolume = 1 - Math.pow(c_distance / markDistance, 2)
+      this.audio.play()
+      this.setBackgroundAudioVolume(backgroundAudioVolume)
+      this.audio.volume = audioVolume;
+    }
 
-      let audioVolume =
-        markDistance - c_distance > 0
-          ? 1 - Math.pow(c_distance / markDistance, 2)
-          : 0;
-      
+    if (p_distance !== c_distance && markDistance - c_distance <= 0) {
+      let backgroundAudioVolume = 1;
+      backgroundAudioVolume = backgroundAudioVolume * 0.2;
+      let audioVolume = 0;
+      this.audio.pause()
       this.setBackgroundAudioVolume(backgroundAudioVolume)
       this.audio.volume = audioVolume;
     }
@@ -64,6 +66,7 @@ export default class Player extends Component {
     return (
       <div>
         <audio
+          autoPlay={false}
           src={"./1.mp3"}
           ref={node => {
             this.audio = node;

@@ -4,8 +4,9 @@ import fetchJsonp from "fetch-jsonp";
 import "./App.css";
 import { GetISSDistance } from "./utils";
 
+import Loading from "./components/Loading";
 import ForecastBoard from "./components/ForecastBoard";
-import Player from "./components/Player.js";
+import Player from "./components/Player";
 
 // eslint-disable-next-line
 const geolocation = new qq.maps.Geolocation(
@@ -71,8 +72,7 @@ class App extends Component {
           },
           () => {
             this.setState({
-              distance:
-              GetISSDistance(
+              distance: GetISSDistance(
                 this.state.loca_lat,
                 this.state.loca_lng,
                 this.state.iss_lat,
@@ -104,8 +104,6 @@ class App extends Component {
     });
     if (screenfull.enabled) {
       screenfull.toggle(this.refs.App);
-    } else {
-      alert("screen full error");
     }
   };
   animationStart = duration => {
@@ -131,6 +129,7 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
+        <Loading onTouchEnd={this.start} onDoubleClick={this.start} hidden={this.state.audioStart}/>
         <div
           className={[
             "circle-container",
@@ -147,7 +146,7 @@ class App extends Component {
           distance={Math.round(this.state.distance)}
           audioStar={this.state.audioStart}
         />
-        <div className="container" onDoubleClick={this.start}>
+        <div className="container">
           <div />
           <ForecastBoard
             distance={Math.round(this.state.distance)}
