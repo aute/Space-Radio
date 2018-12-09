@@ -25,7 +25,7 @@ class Loading extends Component {
               onClick={e => this.props.onDoubleClick(e)}
               onTouchEnd={e => this.props.onTouchEnd(e)}
             >
-              →
+              <img src="./go.svg" alt="" />
             </button>
           </span>
         </div>
