@@ -9,7 +9,7 @@
 }
 
 .main-logo {
-    width: 18em;
+    width: 12em;
 }
 
 .loading-container {
@@ -17,6 +17,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    white-space:nowrap;
 }
 
 .loading.hidden {
@@ -26,16 +27,17 @@
 
 .separate {
     display: inline-block;
-    width: 3em;
-    height: 18em;
-    margin: 0 2em;
+    width: 2em;
+    height: 12em;
+    margin: 0 0.5em;
     background: #fff
 }
 
 .state-blok {
     display: inline-block;
-    width: 18em;
-    height: 18em;
+    width: 12em;
+    height: 12em;
+    margin-right: -1em;
 }
 
 @keyframes hidden {
@@ -59,9 +61,9 @@
 
 /****DEBUT SPINNER****/
 #spinner {
-    height: 14em;
-    width: 14em;
-    border: 3em solid #fff;
+    height: 8em;
+    width: 8em;
+    border: 2em solid #fff;
     border-left-color: transparent;
     border-right-color: transparent;
     border-radius: 50%;
@@ -97,13 +99,12 @@
     outline: none;
     margin: 0;
     padding: 0;
-    font-size: 0em;
-    line-height: 1em;
+    font-size: 1em;
     opacity: 0;
     display: none;
 }
 #go img {
-    height: 18rem;
+    height: 12em;
 }
 #go.show{
     display: block;

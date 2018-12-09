@@ -22,7 +22,7 @@ class Loading extends Component {
             <button
               id="go"
               className={`${this.props.ok ? "show" : ""}`}
-              onClick={e => this.props.onDoubleClick(e)}
+              onClick={e => this.props.onClick(e)}
               onTouchEnd={e => this.props.onTouchEnd(e)}
             >
               <img src="./go.svg" alt="" />

@@ -131,7 +131,7 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <Loading onTouchEnd={this.start} onDoubleClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPositionOk}/>
+        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPositionOk}/>
         <div
           className={[
             "circle-container",
