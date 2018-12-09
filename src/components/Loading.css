@@ -9,7 +9,7 @@
 }
 
 .main-logo {
-    width: 24em;
+    width: 18em;
 }
 
 .loading-container {
@@ -24,6 +24,20 @@
     animation-fill-mode: forwards;
 }
 
+.separate {
+    display: inline-block;
+    width: 3em;
+    height: 18em;
+    margin: 0 2em;
+    background: #fff
+}
+
+.state-blok {
+    display: inline-block;
+    width: 18em;
+    height: 18em;
+}
+
 @keyframes hidden {
     0% {
         opacity: 1;
@@ -34,10 +48,62 @@
         height: 100vh;
         opacity: 0;
     }
-    100%{
+
+    100% {
         opacity: 0;
-        width:0;
-        height:0;
-        visibility:hidden;
+        width: 0;
+        height: 0;
+        visibility: hidden;
     }
+}
+
+/****DEBUT SPINNER****/
+#spinner {
+    height: 14em;
+    width: 14em;
+    border: 3em solid #fff;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 2s infinite;
+    margin: 2em;
+    transition: opacity 0.4s;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+#spinner.hidden {
+    opacity: 0;
+}
+
+/****FIN SPINNER****/
+
+#go {
+    position: absolute;
+    top: 0;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    color: #fff;
+    font-size: 18em;
+    font-weight: 900;
+    line-height: 1em;
+    opacity: 0;
+    display: none;
+}
+#go.show{
+    display: block;
+    opacity: 1;
+    transition: opacity 0.4s; 
 }

@@ -13,11 +13,21 @@ class Loading extends Component {
         className={["loading", `${this.props.hidden ? "hidden" : ""}`].join(
           " "
         )}
-        onTouchEnd={e => this.props.onTouchEnd(e)}
-        onDoubleClick={e => this.props.onDoubleClick(e)}
       >
         <div className="loading-container">
           <img className="main-logo" src="./logo.svg" alt="" />
+          <span className="separate" />
+          <span className="state-blok">
+            <div id="spinner" className={`${this.props.ok ? "hidden" : ""}`}/>
+            <button
+              id="go"
+              className={`${this.props.ok ? "show" : ""}`}
+              onClick={e => this.props.onDoubleClick(e)}
+              onTouchEnd={e => this.props.onTouchEnd(e)}
+            >
+              →
+            </button>
+          </span>
         </div>
       </div>
     );

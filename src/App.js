@@ -26,6 +26,7 @@ class App extends Component {
       distance: 0,
       risetime: 0,
       duration: 0,
+      IssPositionOk: false,
       currentDuration: 0,
       passing: false,
       audioStart: false
@@ -77,7 +78,8 @@ class App extends Component {
                 this.state.loca_lng,
                 this.state.iss_lat,
                 this.state.iss_lng
-              )
+              ),
+              IssPositionOk: true
             });
           }
         );
@@ -129,7 +131,7 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <Loading onTouchEnd={this.start} onDoubleClick={this.start} hidden={this.state.audioStart}/>
+        <Loading onTouchEnd={this.start} onDoubleClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPositionOk}/>
         <div
           className={[
             "circle-container",
