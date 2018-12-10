@@ -78,6 +78,9 @@ export default class Player extends Component {
           ref={node => {
             this.backgroundAudio_main = node;
           }}
+          onLoadedMetadata={e => {
+            this.props.onCanPlay(e);
+          }}
           loop
         />
         <audio

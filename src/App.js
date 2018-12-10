@@ -26,7 +26,10 @@ class App extends Component {
       distance: 0,
       risetime: 0,
       duration: 0,
+      LocaOK: false,
       IssPositionOk: false,
+      IssPassOK: false,
+      AudioOK: false,
       currentDuration: 0,
       passing: false,
       audioStart: false
@@ -59,7 +62,8 @@ class App extends Component {
     geolocation.getLocation(payload => {
       this.setState({
         loca_lat: payload.lat,
-        loca_lng: payload.lng
+        loca_lng: payload.lng,
+        LocaOK: true,
       });
     });
   };
@@ -79,7 +83,7 @@ class App extends Component {
                 this.state.iss_lat,
                 this.state.iss_lng
               ),
-              IssPositionOk: true
+              IssPositionOk: this.state.LocaOK ? true :false
             });
           }
         );
@@ -95,7 +99,8 @@ class App extends Component {
       res.json().then(data => {
         this.setState({
           duration: data.response[0].duration,
-          risetime: data.response[0].risetime * 1000
+          risetime: data.response[0].risetime * 1000,
+          IssPassOK: this.state.LocaOK ? true :false
         });
       });
     });
@@ -131,7 +136,7 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPositionOk}/>
+        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPassOK}/>
         <div
           className={[
             "circle-container",
@@ -147,6 +152,11 @@ class App extends Component {
         <Player
           distance={Math.round(this.state.distance)}
           audioStar={this.state.audioStart}
+          onCanPlay={e => {
+            this.setState({
+              AudioOK: true
+            });
+          }}
         />
         <div className="container">
           <div />
