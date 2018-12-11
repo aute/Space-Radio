@@ -96,6 +96,7 @@
     opacity: 0;
     display: none;
     color: #fff;
+    font-family: "Space Mono";
 }
 #go.show{
     display: block;
