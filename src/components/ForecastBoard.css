@@ -9,8 +9,15 @@
 .ForecastBoard h2 {
   font-size: 2em;
 }
+.ForecastBoard h3 {
+  margin: 0.4em
+}
+.ForecastBoard .arrow{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue"
+}
 .ForecastTitle {
-  font-size: 4.8em;
+  font-size: 3.2em;
   line-height: 100%;
   margin-block-start: 0em;
   margin-block-end: 0em;

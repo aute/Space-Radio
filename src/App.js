@@ -169,10 +169,10 @@ class App extends Component {
         <div className="container">
           <header>
             <h1>SPACERADIO</h1>
-            <h4>{formatDegree(this.state.loca_lat) +' '+ formatDegree(this.state.loca_lng)}</h4>
+            <p>{formatDegree(this.state.loca_lat) +' '+ formatDegree(this.state.loca_lng)}</p>
           </header>
           <article>
-            This website is communicating with <a href="https://www.meteorwatch.org/beginners-guide-international-space-station-iss/" target="_Blank">ISS</a>.
+            This website is communicating with <a href="https://www.meteorwatch.org/beginners-guide-international-space-station-iss/" target="_bblank">ISS</a>(can be spotted with 👀).
             Music will be played only when ISS is passing💫 overhead.
           </article>
           <div />
@@ -182,7 +182,7 @@ class App extends Component {
             risetime={this.state.risetime}
             passList={this.state.passList}
           />
-          <footer>Created by  Shengwen & Aute 🔭</footer>
+          <footer>Created by Shengwen & Aute 🔭</footer>
         </div>
       </div>
     );
