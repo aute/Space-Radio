@@ -14,7 +14,7 @@ class ForecastBoard extends Component {
         <h4>ISS is far away</h4>
         <h1 className="ForecastTitle">{this.props.distance} KM</h1>
         <h2 className="ForecastSubTitle">
-          Next pass times <span className="arrow">---></span>{" "}
+          Next pass times <span className="arrow">➡️</span>{" "}
           {moment(new Date(this.props.risetime)).format("hh:mm A")}
         </h2>
         {this.props.passList.map((item, index) => {

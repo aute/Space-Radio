@@ -1,5 +1,5 @@
 .ForecastBoard {
-  margin-top: 4em;
+  margin-top: 6em;
   color: #fff;
   text-align: end
 }
@@ -8,9 +8,12 @@
 }
 .ForecastBoard h2 {
   font-size: 2em;
+  margin-top: 4em;
 }
 .ForecastBoard h3 {
-  margin: 0.4em
+  margin: 0.4em;
+  line-height: 60%;
+
 }
 .ForecastBoard .arrow{
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -18,7 +21,7 @@
 }
 .ForecastTitle {
   font-size: 3.2em;
-  line-height: 100%;
+  line-height: 20%;
   margin-block-start: 0em;
   margin-block-end: 0em;
   text-align: end
