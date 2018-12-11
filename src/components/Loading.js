@@ -15,17 +15,17 @@ class Loading extends Component {
         )}
       >
         <div className="loading-container">
-          <img className="main-logo" src="./logo.svg" alt="" />
-          <span className="separate" />
           <span className="state-blok">
-            <div id="spinner" className={`${this.props.ok ? "hidden" : ""}`}/>
+            <div id="spinner" className={`${this.props.ok ? "hidden" : ""}`}> 
+            Initializing<span id="flash"> _</span>
+            </div>
             <button
               id="go"
               className={`${this.props.ok ? "show" : ""}`}
               onClick={e => this.props.onClick(e)}
               onTouchEnd={e => this.props.onTouchEnd(e)}
             >
-              <img src="./go.svg" alt="" />
+              Press to enter : )
             </button>
           </span>
         </div>

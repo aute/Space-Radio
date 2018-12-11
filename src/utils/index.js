@@ -17,8 +17,16 @@ export const GetDistance = (lat1, lng1, lat2, lng2) => {
 };
 
 export const GetISSDistance = (lat1, lng1, lat2, lng2) => {
-  let a = GetDistance(lat1, lng1, lat2, lng2)
-  let b = 350
-  return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+  let a = GetDistance(lat1, lng1, lat2, lng2);
+  let b = 350;
+  return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+};
+
+export const formatDegree = value => {
+  value = Math.abs(value);
+  var v1 = Math.floor(value);
+  var v2 = Math.floor((value - v1) * 60);
+  var v3 = Math.round(((value - v1) * 3600) % 60);
+  return v1 + "°" + v2 + "'" + v3 + '"';
 };
 

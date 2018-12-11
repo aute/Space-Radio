@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
 import "./App.css";
-import { GetISSDistance } from "./utils";
+import { GetISSDistance,formatDegree } from "./utils";
 
 import Loading from "./components/Loading";
 import ForecastBoard from "./components/ForecastBoard";
@@ -26,6 +26,7 @@ class App extends Component {
       distance: 0,
       risetime: 0,
       duration: 0,
+      passList:[],
       LocaOK: false,
       IssPositionOk: false,
       IssPassOK: false,
@@ -63,7 +64,7 @@ class App extends Component {
       this.setState({
         loca_lat: payload.lat,
         loca_lng: payload.lng,
-        LocaOK: true,
+        LocaOK: true
       });
     });
   };
@@ -83,7 +84,7 @@ class App extends Component {
                 this.state.iss_lat,
                 this.state.iss_lng
               ),
-              IssPositionOk: this.state.LocaOK ? true :false
+              IssPositionOk: this.state.LocaOK ? true : false
             });
           }
         );
@@ -100,7 +101,8 @@ class App extends Component {
         this.setState({
           duration: data.response[0].duration,
           risetime: data.response[0].risetime * 1000,
-          IssPassOK: this.state.LocaOK ? true :false
+          IssPassOK: this.state.LocaOK ? true : false,
+          passList:data.response,
         });
       });
     });
@@ -136,7 +138,12 @@ class App extends Component {
         className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
         ref="App"
       >
-        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPassOK}/>
+        <Loading
+          onTouchEnd={this.start}
+          onClick={this.start}
+          hidden={this.state.audioStart}
+          ok={this.state.IssPassOK}
+        />
         <div
           className={[
             "circle-container",
@@ -158,13 +165,24 @@ class App extends Component {
             });
           }}
         />
+
         <div className="container">
+          <header>
+            <h1>SPACERADIO</h1>
+            <p>{formatDegree(this.state.loca_lat) +' '+ formatDegree(this.state.loca_lng)}</p>
+          </header>
+          <article>
+            This website is communicating with <a href="https://www.meteorwatch.org/beginners-guide-international-space-station-iss/" target="_bblank">ISS</a>(can be spotted with 👀).
+            Music will be played only when ISS is passing💫 overhead.
+          </article>
           <div />
           <ForecastBoard
             distance={Math.round(this.state.distance)}
             duration={this.state.duration}
             risetime={this.state.risetime}
+            passList={this.state.passList}
           />
+          <footer>Created by Shengwen & Aute 🔭</footer>
         </div>
       </div>
     );
