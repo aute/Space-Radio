@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
+import io from 'socket.io-client'
 import "./App.css";
 import { GetISSDistance } from "./utils";
 
-import Loading from "./components/Loading";
+// import Loading from "./components/Loading";
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player";
 
@@ -13,6 +14,12 @@ const geolocation = new qq.maps.Geolocation(
   "MPFBZ-TPZW4-AWOU3-XG2RL-3VE47-MSFIE",
   "Outer Space Radio"
 );
+
+var socket = io();
+socket.on('news', function (data) {
+  console.log(data);
+  socket.emit('event', { my: 'data' });
+});
 
 class App extends Component {
   constructor(props) {
