@@ -16,10 +16,6 @@ const geolocation = new qq.maps.Geolocation(
 );
 
 var socket = io();
-socket.on('news', function (data) {
-  console.log(data);
-  socket.emit('event', { my: 'data' });
-});
 
 class App extends Component {
   constructor(props) {
@@ -45,12 +41,10 @@ class App extends Component {
   componentDidMount() {
     this.getHour();
     this.getLoca();
-    this.getIssPosition();
     this.background_timer = setInterval(() => {
       this.getHour();
     }, 1000 * 60 * 60);
     this.getIssPosition_timer = setInterval(() => {
-      this.getIssPosition();
       if (this.state.risetime - new Date() < 0) {
         if (!this.state.passing) {
           this.animationStart(this.state.duration);
@@ -58,6 +52,25 @@ class App extends Component {
         this.getIssPass();
       }
     }, 1000);
+    socket.on('issPositionChange', (data) => {
+      this.setState(
+        {
+          iss_lat: data.latitude,
+          iss_lng: data.longitude
+        },
+        () => {
+          this.setState({
+            distance: GetISSDistance(
+              this.state.loca_lat,
+              this.state.loca_lng,
+              this.state.iss_lat,
+              this.state.iss_lng
+            ),
+            IssPositionOk: this.state.LocaOK ? true :false
+          });
+        }
+      );
+    });
   }
   getHour = () => {
     let now = new Date();
@@ -71,29 +84,6 @@ class App extends Component {
         loca_lat: payload.lat,
         loca_lng: payload.lng,
         LocaOK: true,
-      });
-    });
-  };
-  getIssPosition = () => {
-    fetch("http://api.open-notify.org/iss-now.json").then(res => {
-      res.json().then(data => {
-        this.setState(
-          {
-            iss_lat: data.iss_position.latitude,
-            iss_lng: data.iss_position.longitude
-          },
-          () => {
-            this.setState({
-              distance: GetISSDistance(
-                this.state.loca_lat,
-                this.state.loca_lng,
-                this.state.iss_lat,
-                this.state.iss_lng
-              ),
-              IssPositionOk: this.state.LocaOK ? true :false
-            });
-          }
-        );
       });
     });
   };
