@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 import "./App.css";
 import { GetISSDistance } from "./utils";
 import Loading from "./components/Loading";
@@ -39,21 +39,15 @@ class App extends Component {
   }
   componentDidMount() {
     this.getLoca();
-    socket.on('issPositionChange', (data) => {
-      setIssPosition(data)
-      if (this.state.risetime - new Date() < 0) {
-        if (!this.state.passing) {
-          this.animationStart(this.state.duration);
-        }
-        this.getIssPass();
-      }
+    socket.on("issPositionChange", data => {
+      setIssPosition(data);
+      checkIssPass();
     });
   }
-  init = () => {
-    
-  }
-  //设置 ISS 当前位置状态信息
-  setIssPosition = (data) => {
+  init = () => { };
+  
+  // 设置 ISS 当前位置状态信息
+  setIssPosition = data => {
     this.setState(
       {
         iss_lat: data.latitude,
@@ -67,18 +61,28 @@ class App extends Component {
             this.state.iss_lat,
             this.state.iss_lng
           ),
-          IssPositionOk: this.state.LocaOK ? true :false
+          IssPositionOk: this.state.LocaOK ? true : false
         });
       }
     );
-  }
+  };
+
+  // 检查下一次通过信息是否过时,若过时便更新
+  checkIssPass = () => {
+    if (this.state.risetime - new Date() < 0) {
+      if (!this.state.passing) {
+        this.animationStart(this.state.duration);
+      }
+      this.getIssPass();
+    }
+  };
 
   getLoca = () => {
     geolocation.getLocation(payload => {
       this.setState({
         loca_lat: payload.lat,
         loca_lng: payload.lng,
-        LocaOK: true,
+        LocaOK: true
       });
     });
   };
@@ -92,7 +96,7 @@ class App extends Component {
         this.setState({
           duration: data.response[0].duration,
           risetime: data.response[0].risetime * 1000,
-          IssPassOK: this.state.LocaOK ? true :false
+          IssPassOK: this.state.LocaOK ? true : false
         });
       });
     });
@@ -124,11 +128,8 @@ class App extends Component {
   };
   render() {
     return (
-      <div
-        className={"App"}
-        ref="App"
-      >
-        <SkyBackground/>
+      <div className={"App"} ref="App">
+        <SkyBackground />
         {/* <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPassOK}/> */}
         <div
           className={[
