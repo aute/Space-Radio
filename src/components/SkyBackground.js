@@ -5,7 +5,9 @@ import "./SkyBackground.css";
 class SkyBackground extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      hour: 0
+    };
   }
   componentDidMount() {
     this.getHour();

@@ -4,7 +4,6 @@ import fetchJsonp from "fetch-jsonp";
 import io from 'socket.io-client'
 import "./App.css";
 import { GetISSDistance } from "./utils";
-
 import Loading from "./components/Loading";
 import SkyBackground from "./components/SkyBackground";
 import ForecastBoard from "./components/ForecastBoard";
@@ -22,7 +21,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hour: 0,
       loca_lat: 0,
       loca_lng: 0,
       iss_lat: 0,
@@ -41,36 +39,40 @@ class App extends Component {
   }
   componentDidMount() {
     this.getLoca();
-    this.getIssPosition_timer = setInterval(() => {
+    socket.on('issPositionChange', (data) => {
+      setIssPosition(data)
       if (this.state.risetime - new Date() < 0) {
         if (!this.state.passing) {
           this.animationStart(this.state.duration);
         }
         this.getIssPass();
       }
-    }, 1000);
-    socket.on('issPositionChange', (data) => {
-      this.setState(
-        {
-          iss_lat: data.latitude,
-          iss_lng: data.longitude
-        },
-        () => {
-          this.setState({
-            distance: GetISSDistance(
-              this.state.loca_lat,
-              this.state.loca_lng,
-              this.state.iss_lat,
-              this.state.iss_lng
-            ),
-            IssPositionOk: this.state.LocaOK ? true :false
-          });
-        }
-      );
     });
   }
+  init = () => {
+    
+  }
+  //设置 ISS 当前位置状态信息
+  setIssPosition = (data) => {
+    this.setState(
+      {
+        iss_lat: data.latitude,
+        iss_lng: data.longitude
+      },
+      () => {
+        this.setState({
+          distance: GetISSDistance(
+            this.state.loca_lat,
+            this.state.loca_lng,
+            this.state.iss_lat,
+            this.state.iss_lng
+          ),
+          IssPositionOk: this.state.LocaOK ? true :false
+        });
+      }
+    );
+  }
 
-  
   getLoca = () => {
     geolocation.getLocation(payload => {
       this.setState({
@@ -161,7 +163,6 @@ class App extends Component {
     );
   }
   componentWillUnmount() {
-    this.background_timer && clearInterval(this.background_timer);
     this.getIssPosition_timer && clearInterval(this.getIssPosition_timer);
   }
 }
