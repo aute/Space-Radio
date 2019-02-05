@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import "./App.css";
 import { GetISSDistance } from "./utils";
 import Loading from "./components/Loading";
+import InputSend from "./components/InputSend";
 import SkyBackground from "./components/SkyBackground";
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player";
@@ -15,7 +16,7 @@ const geolocation = new qq.maps.Geolocation(
   "Outer Space Radio"
 );
 
-var socket = io();
+const socket = io();
 
 class App extends Component {
   constructor(props) {
@@ -40,12 +41,19 @@ class App extends Component {
   componentDidMount() {
     this.getLoca();
     socket.on("issPositionChange", data => {
-      setIssPosition(data);
-      checkIssPass();
+      this.setIssPosition(data);
+      this.checkIssPass();
     });
+    socket.on("helloWorld", data => {
+      this.setState(
+        {
+          text: data
+        })
+    });
+    
   }
-  init = () => { };
-  
+  init = () => {};
+
   // 设置 ISS 当前位置状态信息
   setIssPosition = data => {
     this.setState(
@@ -77,6 +85,7 @@ class App extends Component {
     }
   };
 
+  // 获取本地位置信息
   getLoca = () => {
     geolocation.getLocation(payload => {
       this.setState({
@@ -153,12 +162,15 @@ class App extends Component {
           }}
         />
         <div className="container">
-          <div />
-          <ForecastBoard
-            distance={Math.round(this.state.distance)}
-            duration={this.state.duration}
-            risetime={this.state.risetime}
-          />
+          <div><h1 style={{ color: '#fff' }}>{this.state.text}</h1></div>
+          <div>
+            <ForecastBoard
+              distance={Math.round(this.state.distance)}
+              duration={this.state.duration}
+              risetime={this.state.risetime}
+            />
+            <InputSend socket={socket}/>
+          </div>
         </div>
       </div>
     );

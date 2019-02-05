@@ -17,8 +17,11 @@ const server = app.listen(80, () => {
 
 const io = require("socket.io")(server);
 
-// io.on("connection", function(socket) {
-// });
+io.on("connection", function (socket) {
+  socket.on("hello", function (data) {
+    io.emit("helloWorld", data);
+  });
+});
 
 function updateIssNow() {
   return request.get("http://api.open-notify.org/iss-now.json", function(
