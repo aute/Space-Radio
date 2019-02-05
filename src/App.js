@@ -5,7 +5,8 @@ import io from 'socket.io-client'
 import "./App.css";
 import { GetISSDistance } from "./utils";
 
-// import Loading from "./components/Loading";
+import Loading from "./components/Loading";
+import SkyBackground from "./components/SkyBackground";
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player";
 
@@ -39,11 +40,7 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    this.getHour();
     this.getLoca();
-    this.background_timer = setInterval(() => {
-      this.getHour();
-    }, 1000 * 60 * 60);
     this.getIssPosition_timer = setInterval(() => {
       if (this.state.risetime - new Date() < 0) {
         if (!this.state.passing) {
@@ -72,12 +69,8 @@ class App extends Component {
       );
     });
   }
-  getHour = () => {
-    let now = new Date();
-    this.setState({
-      hour: now.getMinutes() > 10 ? now.getHours() + 1 : now.getHours()
-    });
-  };
+
+  
   getLoca = () => {
     geolocation.getLocation(payload => {
       this.setState({
@@ -130,9 +123,10 @@ class App extends Component {
   render() {
     return (
       <div
-        className={["App", `sky-gradient-${this.state.hour}`].join(" ")}
+        className={"App"}
         ref="App"
       >
+        <SkyBackground/>
         {/* <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPassOK}/> */}
         <div
           className={[
