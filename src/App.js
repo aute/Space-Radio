@@ -10,13 +10,22 @@ import SkyBackground from "./components/SkyBackground";
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player";
 
-// eslint-disable-next-line
-const geolocation = new qq.maps.Geolocation(
-  "MPFBZ-TPZW4-AWOU3-XG2RL-3VE47-MSFIE",
-  "Outer Space Radio"
-);
-
 const socket = io();
+const getLoca = () => {
+  // eslint-disable-next-line
+  const geolocation = new qq.maps.Geolocation(
+    "MPFBZ-TPZW4-AWOU3-XG2RL-3VE47-MSFIE",
+    "Outer Space Radio"
+  );
+  return new Promise((resolve, reject) => {
+    geolocation.getLocation(payload => {
+      resolve({
+        lat: payload.lat,
+        lng: payload.lng
+      });
+    });
+  });
+};
 
 class App extends Component {
   constructor(props) {
@@ -39,20 +48,32 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    this.getLoca();
+    this.init()
+  }
+  init = () => {
     socket.on("issPositionChange", data => {
       this.setIssPosition(data);
       this.checkIssPass();
     });
+
+    //接收广播信息
     socket.on("helloWorld", data => {
-      this.setState(
-        {
-          text: data
-        })
+      this.setState({
+        text: data
+      });
     });
-    
-  }
-  init = () => {};
+    getLoca().then(value => {
+      socket.emit("join", {
+        lat: value.lat,
+        lng: value.lng
+      });
+      this.setState({
+        loca_lat: value.lat,
+        loca_lng: value.lng,
+        LocaOK: true
+      });
+    });
+  };
 
   // 设置 ISS 当前位置状态信息
   setIssPosition = data => {
@@ -85,16 +106,6 @@ class App extends Component {
     }
   };
 
-  // 获取本地位置信息
-  getLoca = () => {
-    geolocation.getLocation(payload => {
-      this.setState({
-        loca_lat: payload.lat,
-        loca_lng: payload.lng,
-        LocaOK: true
-      });
-    });
-  };
   getIssPass = () => {
     fetchJsonp(
       `http://api.open-notify.org/iss-pass.json?lat=${
@@ -162,14 +173,16 @@ class App extends Component {
           }}
         />
         <div className="container">
-          <div><h1 style={{ color: '#fff' }}>{this.state.text}</h1></div>
+          <div>
+            <h1 style={{ color: "#fff" }}>{this.state.text}</h1>
+          </div>
           <div>
             <ForecastBoard
               distance={Math.round(this.state.distance)}
               duration={this.state.duration}
               risetime={this.state.risetime}
             />
-            <InputSend socket={socket}/>
+            <InputSend socket={socket} />
           </div>
         </div>
       </div>

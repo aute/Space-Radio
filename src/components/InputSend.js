@@ -15,8 +15,6 @@ class InputSend extends Component {
   };
   onKeyDown = event => {
     if (event.keyCode === 13) {
-      console.log(this.props.socket);
-      
       this.props.socket.emit("hello", this.state.value);
     }
   };
