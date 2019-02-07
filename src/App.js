@@ -57,7 +57,7 @@ class App extends Component {
     });
 
     //接收广播信息
-    socket.on("helloWorld", data => {
+    socket.on("hello", data => {
       this.setState({
         text: data
       });

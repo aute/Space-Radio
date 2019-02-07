@@ -30,7 +30,7 @@ io.on("connection", function(socket) {
     info.socket = socket
     state.userList.push(info);
   });
-  socket.on("hello", data => {
+  socket.on("helloWorld", data => {
     state.userList.map(item => {
     const distance = GetISSDistance(
         item.lat,
@@ -39,7 +39,7 @@ io.on("connection", function(socket) {
         state.issNow.longitude
     )
       if (distance < 2200) {
-        io.emit("helloWorld", data);
+        io.emit("hello", data);
       }
     })
   });
