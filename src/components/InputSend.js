@@ -20,7 +20,12 @@ class InputSend extends Component {
   };
   render() {
     return (
-      <input type="text" onChange={this.onChange} onKeyDown={this.onKeyDown} />
+      <input type="text" onChange={this.onChange} onKeyDown={this.onKeyDown} style={{
+        background: "none",
+        outline: "none",
+        border: "0"
+      }}
+      />
     );
   }
 }
