@@ -7,6 +7,8 @@ import { GetISSDistance } from "./utils";
 import Loading from "./components/Loading";
 import InputSend from "./components/InputSend";
 import SkyBackground from "./components/SkyBackground";
+import Header from "./components/Header";
+import Sider from "./components/Sider";
 import ForecastBoard from "./components/ForecastBoard";
 import Player from "./components/Player";
 
@@ -48,7 +50,7 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    this.init()
+    this.init();
   }
   init = () => {
     socket.on("issPositionChange", data => {
@@ -172,19 +174,20 @@ class App extends Component {
             });
           }}
         />
-        <div className="container">
-          <div>
-            <h1 style={{ color: "#fff" }}>{this.state.text}</h1>
-          </div>
-          <div>
-            <ForecastBoard
-              distance={Math.round(this.state.distance)}
-              duration={this.state.duration}
-              risetime={this.state.risetime}
-            />
-            <InputSend socket={socket} />
-          </div>
+        <Header />
+        <Sider>
+        <div>
+          <h1 style={{ color: "#fff" }}>{this.state.text}</h1>
         </div>
+        <div>
+          <ForecastBoard
+            distance={Math.round(this.state.distance)}
+            duration={this.state.duration}
+            risetime={this.state.risetime}
+          />
+          <InputSend socket={socket} />
+        </div>
+        </Sider>
       </div>
     );
   }
