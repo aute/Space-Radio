@@ -2,9 +2,18 @@
     position: absolute;
     top: 0;
     right: 0;
-    max-width: 25rem;
-    width:100%;
+    width: 25rem;
     height: 100vh;
     border: 1px solid #fff;
+    padding-top: 4rem;
     background-color: #000;
+    transition: width 0.6s,background 0.6s;
+}
+
+@media only screen and (max-width:768px) {
+    .Sider {
+        transition: width 0.6s,background 0.6s;
+        background: rgba(0, 0, 0, 0);
+        width: 100%;
+    }
 }

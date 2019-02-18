@@ -1,0 +1,19 @@
+.ForecastBoard {
+  color: #fff;
+}
+
+.ForecastTitle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+}
+.company{
+  width: 4rem;
+  font-size: 1.5rem;
+}
+.ForecastSubTitle {
+  padding-right: 4rem;
+  text-align: end;
+}

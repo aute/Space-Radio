@@ -176,17 +176,12 @@ class App extends Component {
         />
         <Header />
         <Sider>
-        <div>
-          <h1 style={{ color: "#fff" }}>{this.state.text}</h1>
-        </div>
-        <div>
           <ForecastBoard
             distance={Math.round(this.state.distance)}
             duration={this.state.duration}
             risetime={this.state.risetime}
           />
           <InputSend socket={socket} />
-        </div>
         </Sider>
       </div>
     );
