@@ -6,8 +6,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
+  margin: 0.5rem 0;
+  font-size: 2.25rem;
 }
 .company{
   width: 4rem;
@@ -16,4 +16,15 @@
 .ForecastSubTitle {
   padding-right: 4rem;
   text-align: end;
+}
+.ForecastSubTitle h5 {
+  margin: 0.5rem 0;
+  font-size: .75rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
+.ForecastSubTitle h3 {
+  margin: 0em;
+  font-size: 1.125rem;
+  font-weight: 400;
 }
