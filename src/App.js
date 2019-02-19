@@ -5,11 +5,12 @@ import io from "socket.io-client";
 import "./App.css";
 import { GetISSDistance } from "./utils";
 import Loading from "./components/Loading";
-import InputSend from "./components/InputSend";
+import InputSend from "./components/InputSend/";
 import SkyBackground from "./components/SkyBackground";
 import Header from "./components/Header";
 import Sider from "./components/Sider";
-import ForecastBoard from "./components/ForecastBoard";
+import ForecastBoard from "./components/ForecastBoard/";
+import Messages from "./components/Messages";
 import Player from "./components/Player";
 
 const socket = io();
@@ -181,7 +182,10 @@ class App extends Component {
             duration={this.state.duration}
             risetime={this.state.risetime}
           />
-          <InputSend socket={socket} />
+          <footer>
+            <Messages />
+            <InputSend socket={socket} />
+          </footer>
         </Sider>
       </div>
     );

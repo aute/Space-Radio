@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styles from "./styles.module.css";
 
 class InputSend extends Component {
   constructor(props) {
@@ -20,12 +21,10 @@ class InputSend extends Component {
   };
   render() {
     return (
-      <input type="text" onChange={this.onChange} onKeyDown={this.onKeyDown} style={{
-        background: "none",
-        outline: "none",
-        border: "0"
-      }}
-      />
+      <div className={styles.input_send}>
+        <input type="text" onChange={this.onChange} onKeyDown={this.onKeyDown} />
+        <button>send</button>
+      </div>
     );
   }
 }

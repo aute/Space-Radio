@@ -18,7 +18,7 @@ class ForecastBoard extends Component {
         <div className={styles.ForecastSubTitle}>
           <h5>NEXT &nbsp;ISS &nbsp;PASS</h5>
           <h3>
-            {moment(new Date(this.props.risetime)).format("hh:mm:ss A")} ∇
+            {moment(new Date(this.props.risetime)).format("A hh:mm:ss")}
           </h3>
         </div>
       </div>
