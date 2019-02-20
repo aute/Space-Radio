@@ -12,6 +12,7 @@ import Sider from "./components/Sider";
 import ForecastBoard from "./components/ForecastBoard/";
 import Messages from "./components/Messages";
 import Player from "./components/Player";
+import ISSState from './mobx/store'
 
 const socket = io();
 const getLoca = () => {
