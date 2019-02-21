@@ -5,23 +5,21 @@ class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showMessages: true
+      showMessages: props.ISSState
     };
   }
   componentDidMount() {}
+  componentWillReceiveProps(nextProps) {
+    this.setState({ showMessages: nextProps.ISSPassing });
+  }
   render() {
-    const showMessages = this.state.showMessages;
+    const showMessages = !this.state.showMessages;
     return (
       <div
         className={[
           `${styles.Messages}`,
           `${showMessages ? styles.show_messages : null}`
         ].join(" ")}
-        onClick={() => {
-          this.setState({
-            showMessages: !this.state.showMessages
-          })
-        }}
       >
         <div className={styles.menu_button_line0} />
         <div className={styles.menu_button_line1} />

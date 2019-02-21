@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
 import io from "socket.io-client";
+import { observer } from "mobx-react";
 import "./App.css";
-import { GetISSDistance } from "./utils";
 import Loading from "./components/Loading";
 import InputSend from "./components/InputSend/";
 import SkyBackground from "./components/SkyBackground";
@@ -12,7 +12,7 @@ import Sider from "./components/Sider";
 import ForecastBoard from "./components/ForecastBoard/";
 import Messages from "./components/Messages";
 import Player from "./components/Player";
-import ISSState from './mobx/store'
+import ISSStore from "./mobx/store";
 
 const socket = io();
 const getLoca = () => {
@@ -31,20 +31,11 @@ const getLoca = () => {
   });
 };
 
+@observer
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loca_lat: 0,
-      loca_lng: 0,
-      iss_lat: 0,
-      iss_lng: 0,
-      distance: 0,
-      risetime: 0,
-      duration: 0,
-      LocaOK: false,
-      IssPositionOk: false,
-      IssPassOK: false,
       AudioOK: false,
       currentDuration: 0,
       passing: false,
@@ -55,6 +46,7 @@ class App extends Component {
     this.init();
   }
   init = () => {
+    //接收 ISS 位置信息
     socket.on("issPositionChange", data => {
       this.setIssPosition(data);
       this.checkIssPass();
@@ -66,45 +58,32 @@ class App extends Component {
         text: data
       });
     });
+
     getLoca().then(value => {
       socket.emit("join", {
         lat: value.lat,
         lng: value.lng
       });
-      this.setState({
+      ISSStore.LocaChange({
         loca_lat: value.lat,
-        loca_lng: value.lng,
-        LocaOK: true
+        loca_lng: value.lng
       });
     });
   };
 
   // 设置 ISS 当前位置状态信息
   setIssPosition = data => {
-    this.setState(
-      {
-        iss_lat: data.latitude,
-        iss_lng: data.longitude
-      },
-      () => {
-        this.setState({
-          distance: GetISSDistance(
-            this.state.loca_lat,
-            this.state.loca_lng,
-            this.state.iss_lat,
-            this.state.iss_lng
-          ),
-          IssPositionOk: this.state.LocaOK ? true : false
-        });
-      }
-    );
+    ISSStore.ISSPositionChange({
+      iss_lat: data.latitude,
+      iss_lng: data.longitude
+    });
   };
 
   // 检查下一次通过信息是否过时,若过时便更新
   checkIssPass = () => {
-    if (this.state.risetime - new Date() < 0) {
+    if (ISSStore.ISSPassing) {
       if (!this.state.passing) {
-        this.animationStart(this.state.duration);
+        this.animationStart(ISSStore.duration);
       }
       this.getIssPass();
     }
@@ -113,15 +92,14 @@ class App extends Component {
   getIssPass = () => {
     fetchJsonp(
       `http://api.open-notify.org/iss-pass.json?lat=${
-        this.state.loca_lat
-      }&lon=${this.state.loca_lng}&`
+        ISSStore.loca_lat
+      }&lon=${ISSStore.loca_lng}&`
     ).then(res => {
       res.json().then(data => {
-        this.setState({
+        ISSStore.ISSPassChange({
           duration: data.response[0].duration,
           risetime: data.response[0].risetime * 1000,
-          IssPassOK: this.state.LocaOK ? true : false
-        });
+        })
       });
     });
   };
@@ -154,7 +132,7 @@ class App extends Component {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        {/* <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={this.state.IssPassOK}/> */}
+        {/* <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={ISSStore.ISStoreInit}/> */}
         <div
           className={[
             "circle-container",
@@ -168,7 +146,7 @@ class App extends Component {
           />
         </div>
         <Player
-          distance={Math.round(this.state.distance)}
+          distance={Math.round(ISSStore.ISSDistance)}
           audioStar={this.state.audioStart}
           onCanPlay={e => {
             this.setState({
@@ -179,9 +157,9 @@ class App extends Component {
         <Header />
         <Sider>
           <ForecastBoard
-            distance={Math.round(this.state.distance)}
-            duration={this.state.duration}
-            risetime={this.state.risetime}
+            distance={ISSStore.ISSDistance}
+            duration={ISSStore.duration}
+            risetime={ISSStore.risetime}
           />
           <footer>
             <Messages />
