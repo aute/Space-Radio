@@ -5,12 +5,12 @@ class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showMessages: props.ISSState
+      showMessages: props.usable
     };
   }
   componentDidMount() {}
   componentWillReceiveProps(nextProps) {
-    this.setState({ showMessages: nextProps.ISSPassing });
+    this.setState({ showMessages: nextProps.usable });
   }
   render() {
     const showMessages = !this.state.showMessages;

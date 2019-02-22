@@ -46,19 +46,6 @@ class App extends Component {
     this.init();
   }
   init = () => {
-    //接收 ISS 位置信息
-    socket.on("issPositionChange", data => {
-      this.setIssPosition(data);
-      this.checkIssPass();
-    });
-
-    //接收广播信息
-    socket.on("hello", data => {
-      this.setState({
-        text: data
-      });
-    });
-
     getLoca().then(value => {
       socket.emit("join", {
         lat: value.lat,
@@ -68,38 +55,56 @@ class App extends Component {
         loca_lat: value.lat,
         loca_lng: value.lng
       });
+      this.getIssPass();
+    });
+    //接收 ISS 位置信息
+    socket.on("issPositionChange", data => {
+      this.updateIssMoveState(data.latitude,data.longitude);
+    });
+
+    //接收广播信息
+    socket.on("hello", data => {
+      this.setState({
+        text: data
+      });
     });
   };
 
-  // 设置 ISS 当前位置状态信息
-  setIssPosition = data => {
+  // 设置 ISS 当前移动状态信息
+  updateIssMoveState = (latitude,longitude) => {
     ISSStore.ISSPositionChange({
-      iss_lat: data.latitude,
-      iss_lng: data.longitude
+      iss_lat: latitude,
+      iss_lng: longitude
     });
+    ISSStore.ISSPassingChange()
+    ISSStore.iss_passing && this.getIssPass();
   };
 
   // 检查下一次通过信息是否过时,若过时便更新
-  checkIssPass = () => {
-    if (ISSStore.ISSPassing) {
-      if (!this.state.passing) {
-        this.animationStart(ISSStore.duration);
-      }
-      this.getIssPass();
-    }
-  };
+  // checkIssPass = () => {
+  //   if (!ISSStore.iss_passing) {
+  //     if (!this.state.passing) {
+  //       this.animationStart(ISSStore.duration);
+  //     }
+  //     this.getIssPass();
+  //   }
+  // };
 
   getIssPass = () => {
     fetchJsonp(
-      `http://api.open-notify.org/iss-pass.json?lat=${
-        ISSStore.loca_lat
-      }&lon=${ISSStore.loca_lng}&`
+      `http://api.open-notify.org/iss-pass.json?lat=${ISSStore.loca_lat}&lon=${
+        ISSStore.loca_lng
+      }&`
     ).then(res => {
       res.json().then(data => {
-        ISSStore.ISSPassChange({
-          duration: data.response[0].duration,
-          risetime: data.response[0].risetime * 1000,
-        })
+        ISSStore.ISSPassInfoChange({
+          duration: data.response[0].duration * 1000,
+          risetime: data.response[0].risetime * 1000
+        });
+        // ISSStore.ISSPassInfoChange({
+        //   duration: 7 * 1000,
+        //   risetime: Date.now() + 8 * 1000
+        // });
       });
     });
   };
@@ -162,8 +167,8 @@ class App extends Component {
             risetime={ISSStore.risetime}
           />
           <footer>
-            <Messages />
-            <InputSend socket={socket} />
+            <Messages usable ={ISSStore.iss_passing}/>
+            <InputSend usable ={ISSStore.iss_passing} socket={socket} />
           </footer>
         </Sider>
       </div>

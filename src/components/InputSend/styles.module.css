@@ -25,4 +25,8 @@
     color: #fff;
     border-left: 1px solid #fff;
     font-size: 1.5rem;
+    transition: all 0.6s;
+}
+.noUsableButton{
+    text-decoration:line-through
 }

@@ -5,10 +5,14 @@ class InputSend extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      value: "",
+      usable:this.props.usable
     };
   }
-  componentDidMount() {}
+  componentDidMount() { }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ usable: nextProps.usable });
+  }
   onChange = event => {
     this.setState({
       value: event.target.value
@@ -20,10 +24,11 @@ class InputSend extends Component {
     }
   };
   render() {
+    const usable = this.state.usable
     return (
       <div className={styles.input_send}>
         <input type="text" onChange={this.onChange} onKeyDown={this.onKeyDown} />
-        <button>send</button>
+        <button className={!usable && styles.noUsableButton}>&nbsp;send&nbsp;</button>
       </div>
     );
   }
