@@ -39,7 +39,7 @@ io.on("connection", function(socket) {
         state.issNow.longitude
       );
       // 开发阶段 大于小于反向 方便测试
-      if (distance < 2200) {
+      if (distance < 2300) {
         item.socket.emit("hello",{
           lat:item.lat,
           lng: item.lng,

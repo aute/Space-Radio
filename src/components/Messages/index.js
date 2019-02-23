@@ -12,8 +12,6 @@ class Messages extends Component {
   componentDidMount() {
         //接收广播信息
     this.props.socket.on("hello", data => {
-          console.log(data);
-          
           this.setState({
             messages: [ data,...this.state.messages]
           });
@@ -21,6 +19,13 @@ class Messages extends Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ showMessages: nextProps.usable });
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (!nextState.usable) {
+      this.setState({
+        messages: []
+      });
+    }
   }
   renderMessagesList = () => {
     return this.state.messages.map((item, index) => {

@@ -10,7 +10,7 @@ class InputSend extends Component {
       placeholder: ""
     };
   }
-  componentDidMount() { }
+  componentDidMount() {}
   componentWillReceiveProps(nextProps) {
     if (nextProps.usable !== this.state.usable) {
       this.setState({ usable: nextProps.usable });
@@ -26,17 +26,30 @@ class InputSend extends Component {
   };
   onKeyDown = event => {
     if (event.keyCode === 13) {
+      this.sendMessage()
+    }
+  };
+  sendMessage = () => {
+    if (this.state.usable) {
       this.props.socket.emit("helloWorld", this.state.value);
-      this.refs.input.value = ""
+      this.refs.input.value = "";
     }
   };
   render() {
-    const usable = this.state.usable
-    const placeholder = this.state.placeholder
+    const usable = this.state.usable;
+    const placeholder = this.state.placeholder;
     return (
       <div className={styles.input_send}>
-        <input ref="input" type="text" placeholder={placeholder} onChange={this.onChange} onKeyDown={this.onKeyDown} />
-        <button className={!usable && styles.noUsableButton}>&nbsp;send&nbsp;</button>
+        <input
+          ref="input"
+          type="text"
+          placeholder={placeholder}
+          onChange={this.onChange}
+          onKeyDown={this.onKeyDown}
+        />
+        <button onClick={this.sendMessage} className={!usable && styles.noUsableButton}>
+          &nbsp;send&nbsp;
+        </button>
       </div>
     );
   }
