@@ -46,7 +46,7 @@ class ISSStore {
       ? GetISSDistance(
           this.loca_lat,
           this.loca_lng,
-          this.loca_lng,
+          this.iss_lat,
           this.iss_lng
         ).toFixed(2)
       : 0;

@@ -27,21 +27,26 @@ io.on("connection", function(socket) {
   socket.on("join", data => {
     info.lat = data.lat;
     info.lng = data.lng;
-    info.socket = socket
+    info.socket = socket;
     state.userList.push(info);
   });
   socket.on("helloWorld", data => {
     state.userList.map(item => {
-    const distance = GetISSDistance(
+      const distance = GetISSDistance(
         item.lat,
         item.lng,
         state.issNow.latitude,
         state.issNow.longitude
-    )
-      if (distance < 2200) {
-        io.emit("hello", data);
+      );
+      // 开发阶段 大于小于反向 方便测试
+      if (distance > 2200) {
+        item.socket.emit("hello",{
+          lat:item.lat,
+          lng: item.lng,
+          text: data,
+        });
       }
-    })
+    });
   });
 });
 

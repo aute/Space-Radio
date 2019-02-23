@@ -1,7 +1,7 @@
 .Messages {
     position: absolute;
     display:flex;
-    flex-direction:column;
+    align-items: center;
     bottom: 4rem;
     margin: 1rem;
     width: calc(100% - 2rem);
@@ -39,4 +39,25 @@
     background-color: rgba(255, 255, 255, 1);
     top: 50%;
     transform: rotate(-30deg);
+}
+::-webkit-scrollbar {display:none}
+.Messages_window {
+    height: 14rem;
+    overflow: auto;
+    
+}
+.Message_content{
+    margin: 1rem 0;
+}
+.Message_content address{
+    line-height: 1.25rem;
+    font-size: .75rem;
+    font-style: normal;
+    color: rgba(255, 255, 255, .7)
+}
+.Message_content p{
+    margin: 0;
+    line-height: 1.25rem;
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 1)
 }

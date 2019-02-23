@@ -5,13 +5,33 @@ class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showMessages: props.usable
+      showMessages: props.usable,
+      messages:[]
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+        //接收广播信息
+    this.props.socket.on("hello", data => {
+          console.log(data);
+          
+          this.setState({
+            messages: [ data,...this.state.messages]
+          });
+        });
+  }
   componentWillReceiveProps(nextProps) {
     this.setState({ showMessages: nextProps.usable });
   }
+  renderMessagesList = () => {
+    return this.state.messages.map((item, index) => {
+      return (
+        <div className={styles.Message_content}>
+          <address>{`${item.lat} ${item.lng}`}</address>
+          <p>{item.text}</p>
+        </div>
+      );
+    });
+  };
   render() {
     const showMessages = !this.state.showMessages;
     return (
@@ -23,6 +43,9 @@ class Messages extends Component {
       >
         <div className={styles.menu_button_line0} />
         <div className={styles.menu_button_line1} />
+        <article className={styles.Messages_window}>
+          {this.renderMessagesList()}
+        </article> 
       </div>
     );
   }
