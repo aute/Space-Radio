@@ -119,17 +119,17 @@ class App extends Component {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        {/* <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={ISSStore.ISStoreInit}/> */}
+        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={ISSStore.ISStoreInit}/>
         <div
           className={[
             "circle-container",
-            this.state.passing ? "passing" : ""
+            ISSStore.iss_passing ? "passing" : ""
           ].join(" ")}
-          style={{ animationDuration: `${this.state.currentDuration}s` }}
+          style={{ animationDuration: `${ISSStore.oldDuration}s` }}
         >
           <div
             className="circle"
-            style={{ animationDuration: `6s,${this.state.currentDuration}s` }}
+            style={{ animationDuration: `6s,${ISSStore.scurrentDuration}s` }}
           />
         </div>
         <Player
