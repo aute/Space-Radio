@@ -5,14 +5,16 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuOpen: false
+      menuOpen: this.props.menuOpen
     };
   }
   componentDidMount() { }
   menuButtonSwitch = event => {
+    const menuOpen = !this.state.menuOpen
     this.setState({
-      menuOpen: !this.state.menuOpen
+      menuOpen: menuOpen
     })
+    this.props.onChange(menuOpen)
   };
   render() {
     const menuOpen = this.state.menuOpen;

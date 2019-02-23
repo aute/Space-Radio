@@ -19,9 +19,7 @@ class Messages extends Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ showMessages: nextProps.usable });
-  }
-  componentWillUpdate(nextProps, nextState) {
-    if (!nextState.usable) {
+    if (!nextProps.usable) {
       this.setState({
         messages: []
       });

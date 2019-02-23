@@ -8,11 +8,12 @@ import Loading from "./components/Loading";
 import InputSend from "./components/InputSend/";
 import SkyBackground from "./components/SkyBackground";
 import Header from "./components/Header";
+import Menu from "./components/Menu";
 import Sider from "./components/Sider";
 import ForecastBoard from "./components/ForecastBoard/";
 import Messages from "./components/Messages";
 import Player from "./components/Player";
-import ISSStore from "./mobx/store";
+import { ISSStore } from "./mobx/store";
 
 const socket = io();
 const getLoca = () => {
@@ -37,9 +38,8 @@ class App extends Component {
     super(props);
     this.state = {
       AudioOK: false,
-      currentDuration: 0,
-      passing: false,
-      audioStart: false
+      audioStart: false,
+      menuOpen: false
     };
   }
   componentDidMount() {
@@ -98,28 +98,16 @@ class App extends Component {
       screenfull.toggle(this.refs.App);
     }
   };
-  animationStart = duration => {
-    this.setState({
-      passing: true,
-      currentDuration: duration
-    });
-    let durationTimer = setInterval(() => {
-      if (duration > 1) {
-        duration--;
-      } else {
-        this.setState({
-          passing: false,
-          currentDuration: 0
-        });
-        clearInterval(durationTimer);
-      }
-    }, 1000);
-  };
   render() {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        <Loading onTouchEnd={this.start} onClick={this.start} hidden={this.state.audioStart} ok={ISSStore.ISStoreInit}/>
+        {/* <Loading
+          onTouchEnd={this.start}
+          onClick={this.start}
+          hidden={this.state.audioStart}
+          ok={ISSStore.ISStoreInit}
+        /> */}
         <div
           className={[
             "circle-container",
@@ -129,7 +117,7 @@ class App extends Component {
         >
           <div
             className="circle"
-            style={{ animationDuration: `6s,${ISSStore.scurrentDuration}s` }}
+            style={{ animationDuration: `6s,${ISSStore.oldDuration}s` }}
           />
         </div>
         <Player
@@ -141,7 +129,15 @@ class App extends Component {
             });
           }}
         />
-        <Header />
+        <Header
+          onChange={e => {
+            this.setState({
+              menuOpen: e
+            });
+          }}
+          menuOpen={this.state.menuOpen}
+        />
+        {this.state.menuOpen && <Menu/>}
         <Sider>
           <ForecastBoard
             distance={ISSStore.ISSDistance}

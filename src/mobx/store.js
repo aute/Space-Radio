@@ -1,6 +1,6 @@
 import { observable, action, computed } from "mobx";
 import { GetISSDistance } from "../utils";
-class ISSStore {
+class issStore {
   @observable loca_lat = 0;
   @observable loca_lng = 0;
   @observable iss_lat = 0;
@@ -28,7 +28,7 @@ class ISSStore {
   };
   @action
   ISSPassingChange = () => {
-    let now = Date.now()
+    let now = Date.now();
     this.iss_passing =
       this.oldRisetime - now < 0 &&
       this.oldRisetime + this.oldDuration - now > 0;
@@ -58,5 +58,10 @@ class ISSStore {
   //     : false;
   // }
 }
+class uiStore {
+  @observable menuOpen = false;
+}
+const ISSStore = new issStore();
+const UItore = new uiStore();
 
-export default new ISSStore();
+export { ISSStore, UItore };

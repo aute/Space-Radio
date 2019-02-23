@@ -10,7 +10,7 @@ class Sider extends Component {
   }
   componentDidMount() { }
   render() {
-    const menuOpen = this.state.menuOpen;
+    // const menuOpen = this.state.menuOpen;
     return (
       <div className={styles.Sider}>
         {this.props.children}
