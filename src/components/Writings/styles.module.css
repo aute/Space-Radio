@@ -1,0 +1,15 @@
+.Writings {
+    position: absolute;
+    z-index: 1;
+    margin-top: 8rem;
+    width: calc(100% - 40rem);
+    height: calc(100% - 4rem);
+    padding-left: 2rem;
+    list-style: none;
+}
+::-webkit-scrollbar {display:none}
+.Writings article{
+    height: calc(100% - 12rem);
+    border-bottom: 1px solid #FFF;
+    overflow: auto;
+}

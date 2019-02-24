@@ -1,7 +1,7 @@
 .menu {
     position: absolute;
     z-index: 1;
-    margin-top: 5rem;
+    margin-top: 4rem;
     padding-left: 1rem;
     list-style: none;
 }
@@ -43,4 +43,8 @@
         opacity: 1;
         margin: 0;
     }
+}
+
+.show_writings .menu{
+    display: none;
 }
