@@ -138,7 +138,7 @@ class App extends Component {
           menuOpen={this.state.menuOpen}
         />
         {this.state.menuOpen && <Menu/>}
-        <Sider>
+        <Sider menuOpen = {this.state.menuOpen}>
           <ForecastBoard
             distance={ISSStore.ISSDistance}
             duration={ISSStore.duration}
