@@ -49,6 +49,8 @@
 }
 .Message_content{
     margin: 1rem 0;
+    animation: show 0.6s 1;
+    animation-fill-mode: forwards;
 }
 .Message_content address{
     line-height: 1.25rem;
@@ -61,4 +63,16 @@
     line-height: 1.25rem;
     font-size: 1.125rem;
     color: rgba(255, 255, 255, 1)
+}
+
+@keyframes show {
+    0% {
+        opacity: 0;
+        margin: -2rem -1rem 0 0;
+    }
+
+    100% {
+        opacity: 1;
+        margin: 1rem 0;
+    }
 }

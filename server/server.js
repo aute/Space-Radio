@@ -3,6 +3,7 @@ const Koa = require("koa");
 const path = require("path");
 const static = require("koa-static");
 const request = require("request");
+const uuidv4 = require("uuid/v4");
 const GetISSDistance = require("./utils/GetISSDistance");
 const app = new Koa();
 const state = {
@@ -44,6 +45,7 @@ io.on("connection", function(socket) {
           lat:item.lat,
           lng: item.lng,
           text: data,
+          message_key: uuidv4()
         });
       }
     });

@@ -28,7 +28,7 @@ class Messages extends Component {
   renderMessagesList = () => {
     return this.state.messages.map((item, index) => {
       return (
-        <div className={styles.Message_content}>
+        <div key={item.message_key} className={styles.Message_content}>
           <address>{`${item.lat} ${item.lng}`}</address>
           <p>{item.text}</p>
         </div>
