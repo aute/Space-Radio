@@ -11,6 +11,7 @@
     padding: 1rem 0;
     animation: show .6s;
     transition: all 0.4s;
+    cursor:pointer;
 }
 
 .menu li:hover {

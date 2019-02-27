@@ -28,6 +28,7 @@
     background: none;
     padding: .75rem;
     position: relative;
+    cursor:pointer;
 }
 
 .menu_button_line0,
