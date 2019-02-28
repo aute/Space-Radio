@@ -79,14 +79,14 @@ class App extends Component {
       }&`
     ).then(res => {
       res.json().then(data => {
-        ISSStore.ISSPassInfoChange({
-          duration: data.response[0].duration * 1000,
-          risetime: data.response[0].risetime * 1000
-        });
         // ISSStore.ISSPassInfoChange({
-        //   duration: 7 * 1000,
-        //   risetime: Date.now() + 8 * 1000
+        //   duration: data.response[0].duration * 1000,
+        //   risetime: data.response[0].risetime * 1000
         // });
+        ISSStore.ISSPassInfoChange({
+          duration: 7 * 1000,
+          risetime: Date.now() + 8 * 1000
+        });
       });
     });
   };
@@ -113,12 +113,16 @@ class App extends Component {
             "circle-container",
             ISSStore.iss_passing ? "passing" : ""
           ].join(" ")}
-          style={{ animationDuration: `${ISSStore.oldDuration}s` }}
+          style={{ animationDuration: `${ISSStore.oldDuration / 1000 + 1}s` }}
         >
-          <div
-            className="circle"
-            style={{ animationDuration: `6s,${ISSStore.oldDuration}s` }}
-          />
+          <div className="foucs">
+            <div
+              className="circle"
+              style={{
+                animationDuration: `6s,${ISSStore.oldDuration / 1000 + 1}s`
+              }}
+            />
+          </div>
         </div>
         <Player
           distance={Math.round(ISSStore.ISSDistance)}
@@ -137,8 +141,8 @@ class App extends Component {
           }}
           menuOpen={this.state.menuOpen}
         />
-        {this.state.menuOpen && <Menu/>}
-        <Sider menuOpen = {this.state.menuOpen}>
+        {this.state.menuOpen && <Menu />}
+        <Sider menuOpen={this.state.menuOpen}>
           <ForecastBoard
             distance={ISSStore.ISSDistance}
             duration={ISSStore.duration}
