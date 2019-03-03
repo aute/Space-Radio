@@ -50,6 +50,7 @@
     border-left: 3px solid #FFF;
     color: rgba(255,255,255,0.8);
 }
+
 .Writings em {
     font-weight: 800;
 }
@@ -58,5 +59,7 @@
     display: flex;
 }
 .Writings .team > *{
-    margin: 0 2rem;
+    width: 50%;
+    padding: 0 2rem;
+    flex: auto;
 }
