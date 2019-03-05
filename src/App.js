@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import "./App.css";
 import Loading from "./components/Loading/";
 import InputSend from "./components/InputSend/";
+import ISS from "./components/ISS/"
 import SkyBackground from "./components/SkyBackground/";
 import Header from "./components/Header/";
 import Menu from "./components/Menu/";
@@ -108,22 +109,7 @@ class App extends Component {
           hidden={this.state.audioStart}
           ok={ISSStore.ISStoreInit}
         /> */}
-        <div
-          className={[
-            "circle-container",
-            ISSStore.iss_passing ? "passing" : ""
-          ].join(" ")}
-          style={{ animationDuration: `${ISSStore.oldDuration / 1000 + 1}s` }}
-        >
-          <div className="foucs">
-            <div
-              className="circle"
-              style={{
-                animationDuration: `6s,${ISSStore.oldDuration / 1000 + 1}s`
-              }}
-            />
-          </div>
-        </div>
+        <ISS {...ISSStore} />
         <Player
           distance={Math.round(ISSStore.ISSDistance)}
           audioStar={this.state.audioStart}
