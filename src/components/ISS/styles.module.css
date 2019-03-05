@@ -1,6 +1,6 @@
 
 .circleContainer {
-    z-index: 3;
+    z-index: 1;
     position: absolute;
   }
   .circleContainer.passing::before {
