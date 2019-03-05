@@ -21,7 +21,7 @@ class Writings extends Component {
               <h1>项目故事</h1>
               <p>
                 <a href="http://www.ariss.org/" target="_blank" >ARISS</a>{" "}
-                国际空间站业余无线电台，给林盛文和敖特带来最初地启发。
+                国际空间站业余无线电台，给我们带来最初地启发。
               </p>
               <p>
                 无论是科技或浩瀚太空本身的魅力，还是对「等待」、「孤独」以及「不确定性」地感受与思考，都让我们为之着迷。
