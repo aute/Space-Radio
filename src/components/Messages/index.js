@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { LatLonSpherical } from "geodesy";
 import styles from "./styles.module.css";
 
 class Messages extends Component {
@@ -29,7 +30,7 @@ class Messages extends Component {
     return this.state.messages.map((item, index) => {
       return (
         <div key={item.message_key} className={styles.Message_content}>
-          <address>{`${item.lat} ${item.lng}`}</address>
+          <address>{LatLonSpherical(item.lat,item.lng).toString()}</address>
           <p>{item.text}</p>
         </div>
       );

@@ -3,6 +3,7 @@ import screenfull from "screenfull";
 import fetchJsonp from "fetch-jsonp";
 import io from "socket.io-client";
 import { observer } from "mobx-react";
+import { LatLonSpherical } from "geodesy";
 import "./App.css";
 import Loading from "./components/Loading/";
 import InputSend from "./components/InputSend/";
@@ -138,7 +139,7 @@ class App extends Component {
             <Messages usable={ISSStore.iss_passing} socket={socket} />
             <InputSend
               usable={ISSStore.iss_passing}
-              placeholder={ISSStore.loca_lat + " " + ISSStore.loca_lng}
+              placeholder={LatLonSpherical(ISSStore.loca_lat,ISSStore.loca_lng).toString()}
               socket={socket}
             />
           </footer>
