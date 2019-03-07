@@ -66,4 +66,4 @@ function updateIssNow() {
 }
 const timer = setInterval(() => {
   updateIssNow();
-}, 1000);
+}, 3000);

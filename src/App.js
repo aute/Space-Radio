@@ -81,14 +81,14 @@ class App extends Component {
       }&`
     ).then(res => {
       res.json().then(data => {
-        // ISSStore.ISSPassInfoChange({
-        //   duration: data.response[0].duration * 1000,
-        //   risetime: data.response[0].risetime * 1000
-        // });
         ISSStore.ISSPassInfoChange({
-          duration: 7 * 1000,
-          risetime: Date.now() + 8 * 1000
+          duration: data.response[0].duration * 1000,
+          risetime: data.response[0].risetime * 1000
         });
+        // ISSStore.ISSPassInfoChange({
+        //   duration: 7 * 1000,
+        //   risetime: Date.now() + 8 * 1000
+        // });
       });
     });
   };
@@ -104,12 +104,12 @@ class App extends Component {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        {/* <Loading
+        <Loading
           onTouchEnd={this.start}
           onClick={this.start}
           hidden={this.state.audioStart}
           ok={ISSStore.ISStoreInit}
-        /> */}
+        />
         <ISS {...ISSStore} />
         <Player
           distance={Math.round(ISSStore.ISSDistance)}
