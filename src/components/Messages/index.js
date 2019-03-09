@@ -7,16 +7,18 @@ class Messages extends Component {
     super(props);
     this.state = {
       showMessages: props.usable,
-      messages:[]
+      messages: []
     };
   }
   componentDidMount() {
-        //接收广播信息
+    //接收广播信息
     this.props.socket.on("hello", data => {
-          this.setState({
-            messages: [ data,...this.state.messages]
-          });
+      if (nextProps.usable) {
+        this.setState({
+          messages: [data, ...this.state.messages]
         });
+      }
+    });
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ showMessages: nextProps.usable });
@@ -30,7 +32,7 @@ class Messages extends Component {
     return this.state.messages.map((item, index) => {
       return (
         <div key={item.message_key} className={styles.Message_content}>
-          <address>{LatLonSpherical(item.lat,item.lng).toString()}</address>
+          <address>{LatLonSpherical(item.lat, item.lng).toString()}</address>
           <p>{item.text}</p>
         </div>
       );
@@ -49,7 +51,7 @@ class Messages extends Component {
         <div className={styles.menu_button_line1} />
         <article className={styles.Messages_window}>
           {this.renderMessagesList()}
-        </article> 
+        </article>
       </div>
     );
   }
