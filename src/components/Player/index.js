@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import Tone from 'tone'
 
 export default class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
       audioStar: false,
-      markDistance: 2200,
+      markDistance: 2300,
     };
+    this.backgroundAudio = new Tone.Noise("pink")
+  }
+  componentDidMount() {
+    //this.setBackgroundAudioVolume(0.2)
   }
   componentDidUpdate(prevProps) {
     this.audioController(
@@ -17,48 +22,53 @@ export default class Player extends Component {
       this.state.markDistance
     );
   }
-  componentDidMount() {
-    this.setBackgroundAudioVolume(0.2)
-  }
   audioStart = () => {
     this.audio.play();
-    this.backgroundAudio_main.play();
-    this.backgroundAudio_paint.play();
-    setInterval(() => {
-      let currentTime = Math.ceil(Math.random() * (this.backgroundAudio_paint.duration - 5))
-      this.backgroundAudio_paint.currentTime = currentTime
-    }, 1000 * 5);
+    this.backgroundAudio.start()
+    this.backgroundAudio.volume.value = -1
+    this.backgroundAudio.toMaster()
+    //this.backgroundAudio_main.play();
+    //this.backgroundAudio_paint.play();
+    // setInterval(() => {
+    //   let currentTime = Math.ceil(Math.random() * (this.backgroundAudio_paint.duration - 5))
+    //   this.backgroundAudio_paint.currentTime = currentTime
+    // }, 1000 * 5);
   };
   setBackgroundAudioVolume = (value) => {
-    this.backgroundAudio_main.volume = value;
-    this.backgroundAudio_paint.volume = value;
+    if (value < -500) {
+      value =  -500
+    }
+    this.backgroundAudio.volume.value = value
+    //this.backgroundAudio_main.volume = value;
+    //this.backgroundAudio_paint.volume = value;
   }
   audioController = (
-    p_audioStar,
-    c_audioStar,
-    p_distance,
-    c_distance,
+    prevPropsAudioStar,
+    thisPropsAudioStar,
+    prevPropsDistance,
+    thisPropsDistance,
     markDistance,
   ) => {
-    if (p_audioStar !== c_audioStar && c_audioStar) {
+    if (prevPropsAudioStar !== thisPropsAudioStar && thisPropsAudioStar) {
       this.audioStart();
     }
 
-    if (p_distance !== c_distance && markDistance - c_distance > 0) {
-      let backgroundAudioVolume =  Math.pow(c_distance / markDistance, 4)
-      backgroundAudioVolume = backgroundAudioVolume * 0.2;
-      let audioVolume = 1 - Math.pow(c_distance / markDistance, 2)
+    // passing
+    if (prevPropsDistance !== thisPropsDistance && markDistance - thisPropsDistance > 0) {
+      
+      let audioVolume = 1 - Math.pow(thisPropsDistance / markDistance, 2)
       this.audio.play()
-      this.setBackgroundAudioVolume(backgroundAudioVolume)
       this.audio.volume = audioVolume;
+      let backgroundAudioVolume =  -(Math.pow(markDistance / thisPropsDistance,8))
+      this.setBackgroundAudioVolume(backgroundAudioVolume)
     }
 
-    if (p_distance !== c_distance && markDistance - c_distance <= 0) {
-      let backgroundAudioVolume = 1;
-      backgroundAudioVolume = backgroundAudioVolume * 0.2;
+    if (prevPropsDistance !== thisPropsDistance && markDistance - thisPropsDistance <= 0) {
+      //let backgroundAudioVolume = 1;
+      //backgroundAudioVolume = backgroundAudioVolume * 0.2;
       let audioVolume = 0;
       this.audio.pause()
-      this.setBackgroundAudioVolume(backgroundAudioVolume)
+      //this.setBackgroundAudioVolume(backgroundAudioVolume)
       this.audio.volume = audioVolume;
     }
   };

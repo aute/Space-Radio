@@ -13,7 +13,7 @@ class Messages extends Component {
   componentDidMount() {
     //接收广播信息
     this.props.socket.on("hello", data => {
-      if (nextProps.usable) {
+      if (this.props.usable) {
         this.setState({
           messages: [data, ...this.state.messages]
         });
