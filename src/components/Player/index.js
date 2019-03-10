@@ -59,7 +59,7 @@ export default class Player extends Component {
       let audioVolume = 1 - Math.pow(thisPropsDistance / markDistance, 2)
       this.audio.play()
       this.audio.volume = audioVolume;
-      let backgroundAudioVolume =  -(Math.pow(markDistance / thisPropsDistance,8))
+      let backgroundAudioVolume =  -(Math.pow(markDistance / thisPropsDistance,9))
       this.setBackgroundAudioVolume(backgroundAudioVolume)
     }
 
