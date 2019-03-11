@@ -9,6 +9,7 @@ export default class Player extends Component {
       markDistance: 2300,
     };
     this.backgroundAudio = new Tone.Noise("pink")
+    this.musicAudio = new Tone.Player("./1.mp3").toMaster()
   }
   componentDidMount() {
     //this.setBackgroundAudioVolume(0.2)
@@ -23,10 +24,11 @@ export default class Player extends Component {
     );
   }
   audioStart = () => {
-    this.audio.play();
+    this.audio.play()
     this.backgroundAudio.start()
     this.backgroundAudio.volume.value = -1
     this.backgroundAudio.toMaster()
+    this.musicAudio.start()
     //this.backgroundAudio_main.play();
     //this.backgroundAudio_paint.play();
     // setInterval(() => {
