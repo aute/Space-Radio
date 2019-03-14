@@ -39,7 +39,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      AudioOK: false,
       audioStart: false,
       menuOpen: false
     };
@@ -96,29 +95,24 @@ class App extends Component {
     this.setState({
       audioStart: true
     });
-    if (screenfull.enabled) {
-      screenfull.toggle(this.refs.App);
-    }
+    // if (screenfull.enabled) {
+    //   screenfull.toggle(this.refs.App);
+    // }
   };
   render() {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        <Loading
+        {/* <Loading
           onTouchEnd={this.start}
           onClick={this.start}
           hidden={this.state.audioStart}
           ok={ISSStore.ISStoreInit}
-        />
+        /> */}
         <ISS {...ISSStore} />
         <Player
           distance={Math.round(ISSStore.ISSDistance)}
           audioStar={this.state.audioStart}
-          onCanPlay={e => {
-            this.setState({
-              AudioOK: true
-            });
-          }}
         />
         <Header
           onChange={e => {
