@@ -14,8 +14,7 @@ export default class Player extends Component {
     this.test = 2200;
   }
   componentDidMount() {
-    this.backgroundAudioInitStart();
-
+    // this.backgroundAudioInitStart();
     // this.musicAudio.autostart = true;
     // setInterval(() => {
     //   this.ISSmove(Math.abs(this.test));
@@ -38,6 +37,8 @@ export default class Player extends Component {
   };
   setBackgroundAudioVolume = value => {
     if (value > -200) {
+      console.log(value);
+      
       this.backgroundAudio.volume.value = value;
     }
   };
@@ -60,7 +61,7 @@ export default class Player extends Component {
     this.setMusicAudioVolume(musicAudioVolume);
   };
   ISSout = () => {
-    this.setBackgroundAudioVolume(-1);
+    this.setBackgroundAudioVolume(-20);
     // this.musicAudio
   };
 
@@ -82,7 +83,7 @@ export default class Player extends Component {
       prevPropsDistance !== thisPropsDistance &&
       markDistance - thisPropsDistance <= 0
     ) {
-      if (!this.state.ISSPassing) {
+      if (this.state.ISSPassing) {
         this.ISSout();
         this.setState({
           ISSPassing: false
