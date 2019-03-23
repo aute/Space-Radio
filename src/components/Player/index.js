@@ -10,7 +10,6 @@ export default class Player extends Component {
       ISSPassing: false
     };
     this.backgroundAudio = new Tone.Noise("pink").toMaster();
-    this.musicAudio = new Tone.Player("./1.mp3").toMaster();
     this.test = 2200;
   }
   componentDidMount() {
@@ -39,7 +38,7 @@ export default class Player extends Component {
       Tone.Transport.scheduleOnce(() => {
         this.musicAudio.dispose()
         this.radioStart(urls)
-      }, Tone.Transport.seconds+(this.musicAudio.buffer.duration/10));
+      }, Tone.Transport.seconds+(this.musicAudio.buffer.duration));
       Tone.Transport.start()
     }).toMaster();
   }
