@@ -15,11 +15,12 @@ export default class Player extends Component {
   }
   componentDidMount() {
     // this.backgroundAudioInitStart();
-    // this.musicAudio.autostart = true;
+    // this.radioStart(["./1.mp3","./2.mp3","./3.mp3","./4.mp3"])
     // setInterval(() => {
     //   this.ISSmove(Math.abs(this.test));
     //   this.test = this.test - 20;
     // }, 1000);
+    
   }
   componentDidUpdate(prevProps) {
     this.audioController(
@@ -30,6 +31,17 @@ export default class Player extends Component {
     if (prevProps.audioStar !== this.props.audioStar && this.props.audioStar) {
       this.backgroundAudioInitStart();
     }
+  }
+  radioStart = (urls) => {
+    let current = Math.floor(Math.random() * urls.length)
+    this.musicAudio = new Tone.Player(urls[current], () => {
+      this.musicAudio.start()
+      Tone.Transport.scheduleOnce(() => {
+        this.musicAudio.dispose()
+        this.radioStart(urls)
+      }, Tone.Transport.seconds+(this.musicAudio.buffer.duration/10));
+      Tone.Transport.start()
+    }).toMaster();
   }
   backgroundAudioInitStart = () => {
     this.backgroundAudio.start();
@@ -48,7 +60,7 @@ export default class Player extends Component {
     }
   };
   ISSover = () => {
-    this.musicAudio.autostart = true;
+    this.radioStart(["./1.mp3","./2.mp3","./3.mp3","./4.mp3"])
   };
   ISSmove = Distance => {
     let backgroundAudioVolume =

@@ -103,12 +103,12 @@ class App extends Component {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        <Loading
+        {/* <Loading
           onTouchEnd={this.start}
           onClick={this.start}
           hidden={this.state.audioStart}
           ok={ISSStore.ISStoreInit}
-        />
+        /> */}
         <ISS {...ISSStore} />
         <Player
           distance={Math.round(ISSStore.ISSDistance)}
