@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import io from "socket.io-client";
 import Tone from "tone";
+
+const socket = io();
 
 export default class Player extends Component {
   constructor(props) {
@@ -7,19 +10,24 @@ export default class Player extends Component {
     this.state = {
       audioStar: false,
       markDistance: 2200,
-      ISSPassing: false
+      ISSPassing: false,
+      playList: []
     };
     this.backgroundAudio = new Tone.Noise("pink").toMaster();
     this.test = 2200;
   }
   componentDidMount() {
     // this.backgroundAudioInitStart();
-    // this.radioStart(["./1.mp3","./2.mp3","./3.mp3","./4.mp3"])
+    // this.radioStart();
     // setInterval(() => {
     //   this.ISSmove(Math.abs(this.test));
-    //   this.test = this.test - 20;
+    //   this.test = this.test - 5;
     // }, 1000);
-    
+    socket.on("playList", data => {
+      this.setState({
+        playList: data
+      });
+    });
   }
   componentDidUpdate(prevProps) {
     this.audioController(
@@ -31,35 +39,48 @@ export default class Player extends Component {
       this.backgroundAudioInitStart();
     }
   }
-  radioStart = (urls) => {
-    let current = Math.floor(Math.random() * urls.length)
-    this.musicAudio = new Tone.Player(urls[current], () => {
-      this.musicAudio.start()
-      Tone.Transport.scheduleOnce(() => {
-        this.musicAudio.dispose()
-        this.radioStart(urls)
-      }, Tone.Transport.seconds+(this.musicAudio.buffer.duration));
-      Tone.Transport.start()
-    }).toMaster();
-  }
+  radioStart = oldList => {
+    if (this.state.playList.length && this.state.ISSPassing) {
+      oldList = oldList ? oldList : []
+      let playList = this.state.playList.filter(i => {
+        return  oldList.indexOf(i) === -1
+      })
+      if (playList.length < 1) {
+        playList = oldList
+        oldList=[]
+      }
+      const currentMusic = playList[Math.floor(Math.random() * playList.length)];
+      oldList.push(currentMusic)
+      this.musicAudio = new Tone.Player(currentMusic, () => {
+        this.musicAudio.start();
+        Tone.Transport.scheduleOnce(() => {
+          this.musicAudio.dispose();
+          this.radioStart(oldList);
+        }, Tone.Transport.seconds + this.musicAudio.buffer.duration);
+        Tone.Transport.start();
+      }).toMaster();
+    } else if (this.state.ISSPassing) {
+      setTimeout(() => {
+        this.radioStart();
+      }, 1000 * 3);
+    }
+  };
   backgroundAudioInitStart = () => {
     this.backgroundAudio.start();
     this.backgroundAudio.volume.value = -20;
   };
   setBackgroundAudioVolume = value => {
     if (value > -200) {
-      console.log(value);
-      
       this.backgroundAudio.volume.value = value;
     }
   };
   setMusicAudioVolume = value => {
-    if (this.musicAudio.volume) {
+    if (this.musicAudio && this.musicAudio.volume) {
       this.musicAudio.volume.value = value;
     }
   };
   ISSover = () => {
-    this.radioStart(["./1.mp3","./2.mp3","./3.mp3","./4.mp3"])
+    this.radioStart();
   };
   ISSmove = Distance => {
     let backgroundAudioVolume =

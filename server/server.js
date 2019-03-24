@@ -1,6 +1,8 @@
 // server.js
 const Koa = require("koa");
+const fs = require("fs");
 const path = require("path");
+const join = require("path").join;
 const static = require("koa-static");
 const request = require("request");
 const uuidv4 = require("uuid/v4");
@@ -10,6 +12,21 @@ const state = {
   issNow: null,
   userList: []
 };
+
+function findSync(startPath) {
+  let result = [];
+  function finder(path, pPath) {
+    let files = fs.readdirSync(path);
+    files.forEach((val, index) => {
+      let fPath = join(path, val);
+      let stats = fs.statSync(fPath);
+      if (stats.isDirectory()) finder(fPath, val);
+      if (stats.isFile()) result.push(pPath ? join(pPath, val) : val);
+    });
+  }
+  finder(startPath);
+  return result;
+}
 
 app.use(static(path.join(__dirname, "../build")));
 
@@ -41,8 +58,8 @@ io.on("connection", function(socket) {
       );
       // 开发阶段 大于小于反向 方便测试
       if (distance < 2300) {
-        item.socket.emit("hello",{
-          lat:item.lat,
+        item.socket.emit("hello", {
+          lat: item.lat,
           lng: item.lng,
           text: data,
           message_key: uuidv4()
@@ -66,4 +83,10 @@ function updateIssNow() {
 }
 const timer = setInterval(() => {
   updateIssNow();
+  const playList = findSync(path.join(__dirname, "../public/musicList")).filter(i => {
+    return /.mp3$/.test(i) 
+  }).map(i => {
+    return `./musicList/${i}`
+  })
+  io.emit("playList", playList);
 }, 3000);
