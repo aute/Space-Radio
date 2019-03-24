@@ -9,12 +9,12 @@ export default class Player extends Component {
     super(props);
     this.state = {
       audioStar: false,
-      markDistance: 2400,
+      markDistance: 2250,
       ISSPassing: false,
       playList: []
     };
     this.backgroundAudio = new Tone.Noise("pink").toMaster();
-    this.test = 2200;
+    this.test = 2250;
   }
   componentDidMount() {
     // this.backgroundAudioInitStart();

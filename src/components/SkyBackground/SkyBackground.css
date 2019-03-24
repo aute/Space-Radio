@@ -44,7 +44,7 @@
 .sky-gradient-20:after,
 .sky-gradient-22:after,
 .sky-gradient-24:after {
-  animation: next_even 2400s;
+  animation: next_even 2250s;
 }
 
 .sky-gradient-1:after,
@@ -59,7 +59,7 @@
 .sky-gradient-19:after,
 .sky-gradient-21:after,
 .sky-gradient-23:after {
-  animation: next_odd 2400s;
+  animation: next_odd 2250s;
 }
 
 
