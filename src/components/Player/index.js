@@ -9,7 +9,7 @@ export default class Player extends Component {
     super(props);
     this.state = {
       audioStar: false,
-      markDistance: 2200,
+      markDistance: 2400,
       ISSPassing: false,
       playList: []
     };
@@ -103,9 +103,10 @@ export default class Player extends Component {
       markDistance - thisPropsDistance > 0
     ) {
       if (!this.state.ISSPassing) {
-        this.ISSover();
         this.setState({
           ISSPassing: true
+        }, () => {
+          this.ISSover();
         });
       }
       this.ISSmove(thisPropsDistance);
