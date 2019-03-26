@@ -84,7 +84,7 @@ export default class Player extends Component {
   };
   ISSmove = Distance => {
     let backgroundAudioVolume =
-      -Math.pow(this.state.markDistance / Distance, 9) - 20;
+      -Math.pow((this.state.markDistance - Distance)/45, 2) - 20;
     let musicAudioVolume = -(
       2 +
       Math.pow(Distance / this.state.markDistance, 5) * 60
