@@ -16,12 +16,12 @@ class ForecastBoard extends Component {
       el: this.distance.current,
       value: "0",
       duration: 3000,
-      format: "(,ddd)",
+      format: "(,ddd)"
     });
   }
-  componentWillReceiveProps(nextProps) { 
-    this.od.update(nextProps.distance)
-}
+  componentWillReceiveProps(nextProps) {
+    this.od.update(nextProps.distance);
+  }
   render() {
     return (
       <div className={styles.ForecastBoard}>
@@ -31,7 +31,15 @@ class ForecastBoard extends Component {
         </h1>
         <div className={styles.ForecastSubTitle}>
           <h5>NEXT &nbsp;ISS &nbsp;PASS</h5>
-          <h3>{moment(new Date(this.props.risetime)).format("A hh:mm:ss")}</h3>
+          <h3>
+            {moment(
+              new Date(
+                this.props.risetimObsolete
+                  ? this.props.risetime[1]
+                  : this.props.risetime[0]
+              )
+            ).format("A hh:mm:ss")}
+          </h3>
         </div>
       </div>
     );

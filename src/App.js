@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import screenfull from "screenfull";
-import fetchJsonp from "fetch-jsonp";
 import { observer } from "mobx-react";
 import { LatLonSpherical } from "geodesy";
 import "./App.css";
@@ -24,7 +23,6 @@ class App extends Component {
       menuOpen: false
     };
   }
-  componentDidMount() {}
   start = () => {
     this.setState({
       audioStart: true
@@ -59,24 +57,21 @@ class App extends Component {
         {this.state.menuOpen && <Menu />}
         <Sider menuOpen={this.state.menuOpen}>
           <ForecastBoard
+            risetimObsolete={ISSStore.risetimObsolete}
             distance={ISSStore.ISSDistance}
-            duration={ISSStore.duration}
             risetime={ISSStore.risetime}
           />
           <footer>
-            <Messages usable={ISSStore.iss_passing} socket={socket} />
+            <Messages usable={ISSStore.iss_passing} socket={ISSStore.socket} />
             <InputSend
               usable={ISSStore.iss_passing}
               placeholder={LatLonSpherical(ISSStore.loca_lat,ISSStore.loca_lng).toString()}
-              socket={socket}
+              socket={ISSStore.socket}
             />
           </footer>
         </Sider>
       </div>
     );
-  }
-  componentWillUnmount() {
-    this.getIssPosition_timer && clearInterval(this.getIssPosition_timer);
   }
 }
 

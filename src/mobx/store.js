@@ -8,13 +8,13 @@ class issStore {
   @observable loca_lng = 0;
   @observable iss_lat = 0;
   @observable iss_lng = 0;
-  @observable risetime = 0;
-  @observable duration = 0;
-  @observable oldRisetime = 0;
-  @observable oldDuration = 0;
+  @observable risetime = [];
+  @observable duration = [];
+  @observable risetimObsolete = false
   @observable iss_passing = false;
 
   constructor() {
+    this.socket = io();
     this.init();
   }
 
@@ -24,14 +24,7 @@ class issStore {
       loca_lat: loca.lat,
       loca_lng: loca.lng
     });
-    const IssPassInfo = await getIssPass({
-      loca_lat: this.loca_lat,
-      loca_lng: this.loca_lng
-    });
-    this.ISSPassInfoChange({
-      duration: IssPassInfo.response[0].duration * 1000,
-      risetime: IssPassInfo.response[0].risetime * 1000
-    });
+    await this.ISSPassInfoChange();
     this.socket.on("issPositionChange", data => {
       this.ISSPositionChange({
         iss_lat: data.latitude,
@@ -45,7 +38,6 @@ class issStore {
   LocaChange = payload => {
     this.loca_lat = payload.loca_lat;
     this.loca_lng = payload.loca_lng;
-    this.socket = io();
     this.socket.emit("join", {
       lat: this.loca_lat,
       lng: this.loca_lng
@@ -57,19 +49,32 @@ class issStore {
     this.iss_lng = payload.iss_lng;
   };
   @action
-  ISSPassInfoChange = payload => {
-    this.risetime = payload.risetime;
-    this.duration = payload.duration;
+  ISSPassInfoChange = async () => {
+    const IssPassInfo = await getIssPass({
+      loca_lat: this.loca_lat,
+      loca_lng: this.loca_lng
+    });
+    let duration = []
+    let risetime = []
+    IssPassInfo.response.map(i => {
+      duration.push(i.duration * 1000)
+      risetime.push(i.risetime * 1000)
+    })
+    this.risetime = risetime;
+    this.duration = duration;
+    this.risetimObsolete = false
   };
   @action
   ISSPassingChange = () => {
     let now = Date.now();
     this.iss_passing =
-      this.oldRisetime - now < 0 &&
-      this.oldRisetime + this.oldDuration - now > 0;
-    if (!this.iss_passing && this.risetime !== this.oldRisetime) {
-      this.oldRisetime = this.risetime;
-      this.oldDuration = this.duration;
+      this.risetime[0] - now < 0 &&
+      this.risetime[0] + this.duration[0] - now > 0;
+    if (this.iss_passing && !this.risetimObsolete) {
+      this.risetimObsolete = true
+    }
+    if (now - this.risetime[0] + this.duration[0] > 1000 * 30) {
+      this.ISSPassInfoChange()
     }
   };
 
