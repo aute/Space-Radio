@@ -26,7 +26,6 @@ class ForecastBoard extends Component {
     return (
       <div className={styles.ForecastBoard}>
         <h1 className={styles.ForecastTitle}>
-          {/* <span>{this.props.distance}</span> */}
           <span ref={this.distance} />
           <span className={styles.company}>&nbsp;KM</span>
         </h1>

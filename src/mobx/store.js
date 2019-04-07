@@ -1,5 +1,8 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, runInAction } from "mobx";
+import io from "socket.io-client";
 import { GetISSDistance } from "../utils";
+import { getLoca, getIssPass } from "../api";
+
 class issStore {
   @observable loca_lat = 0;
   @observable loca_lng = 0;
@@ -11,10 +14,42 @@ class issStore {
   @observable oldDuration = 0;
   @observable iss_passing = false;
 
+  constructor() {
+    this.init();
+  }
+
+  @action init = async () => {
+    const loca = await getLoca();
+    this.LocaChange({
+      loca_lat: loca.lat,
+      loca_lng: loca.lng
+    });
+    const IssPassInfo = await getIssPass({
+      loca_lat: this.loca_lat,
+      loca_lng: this.loca_lng
+    });
+    this.ISSPassInfoChange({
+      duration: IssPassInfo.response[0].duration * 1000,
+      risetime: IssPassInfo.response[0].risetime * 1000
+    });
+    this.socket.on("issPositionChange", data => {
+      this.ISSPositionChange({
+        iss_lat: data.latitude,
+        iss_lng: data.longitude
+      });
+      this.ISSPassingChange();
+    });
+  };
+
   @action
   LocaChange = payload => {
     this.loca_lat = payload.loca_lat;
     this.loca_lng = payload.loca_lng;
+    this.socket = io();
+    this.socket.emit("join", {
+      lat: this.loca_lat,
+      lng: this.loca_lng
+    });
   };
   @action
   ISSPositionChange = payload => {
