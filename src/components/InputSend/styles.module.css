@@ -1,6 +1,6 @@
 .input_send {
     position: fixed;
-    bottom: 0;
+    bottom: 1px;
     display: flex;
     width: calc(25rem - 2px);
     transition: width 0.6s;

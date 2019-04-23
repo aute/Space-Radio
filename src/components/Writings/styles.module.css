@@ -1,16 +1,23 @@
 .Writings {
+    width: 100%;
+    height: calc(100% - 3rem);
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.Writings_wapper {
     position: absolute;
     z-index: 1;
     margin-top: 6rem;
     width: calc(100% - 27rem);
-    max-width: 960px;
-    height: calc(100% - 3rem);
+    height: 100%;
     padding-left: 2rem;
     list-style: none;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 @media only screen and (max-width:960px) {
-    .Writings {
+    .Writings_wapper {
         width: calc(100% - 2rem);
     }
 }
@@ -27,28 +34,33 @@
 .Writings .article_content {
     height: calc(100% - 12rem);
     padding-bottom: 1.4rem;
-    border-bottom: 1px solid #FFF;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.9);
     line-height: 1.5rem;
 }
+
 .Writings section {
     margin-bottom: 4rem;
 }
+
 .Writings h1 {
-    font-size: 2rem;
+    font-size: 5rem;
+    font-weight: 500;
 }
+
 .Writings h2 {
     font-size: 1.5rem;
 }
 
 .Writings a {
-    color: #FFF;
+    color: rgba(255, 255, 255, 0.9);
 }
+
 .Writings dfn {
     display: block;
     margin: 1.5rem 0;
-    padding: 0 1.5rem;
-    border-left: 3px solid #FFF;
-    color: rgba(255,255,255,0.8);
+    padding: 0 1rem;
+    border-left: 3px solid rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .Writings em {
@@ -58,7 +70,8 @@
 .Writings .team {
     display: flex;
 }
-.Writings .team > *{
+
+.Writings .team>* {
     width: 50%;
     padding: 0 2rem;
     flex: auto;

@@ -73,6 +73,7 @@ class issStore {
     if (this.iss_passing && !this.risetimObsolete) {
       this.risetimObsolete = true
     }
+    // 接口有 BUG 在 ISS 经过当时请求之后的经过事件列表，返回信息缺少即将到来的最近一项，故做此处理
     if (now - this.risetime[0] + this.duration[0] > 1000 * 30) {
       this.ISSPassInfoChange()
     }
