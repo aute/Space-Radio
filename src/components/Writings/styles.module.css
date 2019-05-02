@@ -3,6 +3,7 @@
     height: calc(100% - 3rem);
     max-width: 720px;
     margin: 0 auto;
+    scrollbar-width: none;
 }
 
 .Writings_wapper {
@@ -25,6 +26,7 @@
 .Writings article {
     height: calc(100%);
     overflow: auto;
+    scrollbar-width: none;
 }
 
 ::-webkit-scrollbar {
