@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from "mobx";
+import { observable, action, computed } from "mobx";
 import io from "socket.io-client";
 import { GetISSDistance } from "../utils";
 import { getLoca, getIssPass } from "../api";
@@ -59,6 +59,7 @@ class issStore {
     IssPassInfo.response.map(i => {
       duration.push(i.duration * 1000)
       risetime.push(i.risetime * 1000)
+      return i
     })
     this.risetime = risetime;
     this.duration = duration;

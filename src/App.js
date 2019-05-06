@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import screenfull from "screenfull";
+// import screenfull from "screenfull";
 import { observer } from "mobx-react";
 import { LatLonSpherical } from "geodesy";
 import "./App.css";
@@ -35,12 +35,13 @@ class App extends Component {
     return (
       <div className={"App"} ref="App">
         <SkyBackground />
-        <Loading
+        {process.env.NODE_ENV !== 'development' &&
+         <Loading
           onTouchEnd={this.start}
           onClick={this.start}
           hidden={this.state.audioStart}
           ok={ISSStore.ISStoreInit}
-        />
+        /> }
         <ISS {...ISSStore} />
         <Player
           distance={Math.round(ISSStore.ISSDistance)}

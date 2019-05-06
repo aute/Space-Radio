@@ -21,7 +21,7 @@ class Writings extends Component {
               <section>
                 <h1>故事</h1>
                 <p>
-                  <a href="http://www.ariss.org/" target="_blank">
+                  <a href="http://www.ariss.org/" target="_blank" rel='noreferrer noopener'>
                     ARISS
                   </a>{" "}
                   国际空间站业余无线电台，带来最初地启发。无论是科技抑或太空本身的魅力，还是对于「等待」、「孤独」以及「不确定性」的感受和思考，都让我们为之着迷。
@@ -37,6 +37,7 @@ class Writings extends Component {
                     <a
                       href="https://zh.wikipedia.org/wiki/%E5%8F%B2%E6%99%AE%E5%B0%BC%E5%85%8B1%E8%99%9F"
                       target="_blank"
+                      rel='noreferrer noopener'
                     >
                       斯普特尼克1号
                     </a>

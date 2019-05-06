@@ -40,6 +40,25 @@ class ForecastBoard extends Component {
               )
             ).format("A hh:mm:ss")}
           </h3>
+          {process.env.NODE_ENV === 'development' && <h3>
+            {moment(
+              new Date(
+                this.props.risetime[1]
+              )
+            ).format("A hh:mm:ss")}
+            <br />
+            {moment(
+              new Date(
+                this.props.risetime[2]
+              )
+            ).format("A hh:mm:ss")}
+            <br />
+            {moment(
+              new Date(
+                this.props.risetime[3]
+              )
+            ).format("A hh:mm:ss")}
+          </h3>}
         </div>
       </div>
     );
