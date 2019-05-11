@@ -17,12 +17,6 @@ export default class Player extends Component {
     this.test = 2250;
   }
   componentDidMount() {
-    // this.backgroundAudioInitStart();
-    // this.radioStart();
-    // setInterval(() => {
-    //   this.ISSmove(Math.abs(this.test));
-    //   this.test = this.test - 5;
-    // }, 1000);
     socket.on("playList", data => {
       this.setState({
         playList: data
@@ -59,6 +53,7 @@ export default class Player extends Component {
         }, Tone.Transport.seconds + this.musicAudio.buffer.duration);
         Tone.Transport.start();
       }).toMaster();
+      this.setMusicAudioVolume(-42);
     } else if (this.state.ISSPassing) {
       setTimeout(() => {
         this.radioStart();
@@ -84,11 +79,14 @@ export default class Player extends Component {
   };
   ISSmove = Distance => {
     let backgroundAudioVolume =
-      -Math.pow((this.state.markDistance - Distance)/45, 2) - 20;
+      -Math.pow((this.state.markDistance - Distance)/60, 1.5) - 20;
     let musicAudioVolume = -(
       2 +
-      Math.pow(Distance / this.state.markDistance, 5) * 60
+      Math.pow(Distance / this.state.markDistance, 12) * 40
     );
+    console.log('backgroundAudioVolume:'+backgroundAudioVolume);
+    console.log('musicAudioVolume:'+musicAudioVolume);
+    
     this.setBackgroundAudioVolume(backgroundAudioVolume);
     this.setMusicAudioVolume(musicAudioVolume);
   };
