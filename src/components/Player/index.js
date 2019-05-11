@@ -84,9 +84,6 @@ export default class Player extends Component {
       2 +
       Math.pow(Distance / this.state.markDistance, 12) * 40
     );
-    console.log('backgroundAudioVolume:'+backgroundAudioVolume);
-    console.log('musicAudioVolume:'+musicAudioVolume);
-    
     this.setBackgroundAudioVolume(backgroundAudioVolume);
     this.setMusicAudioVolume(musicAudioVolume);
   };
