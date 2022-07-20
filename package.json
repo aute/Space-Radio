@@ -83,7 +83,7 @@
   ],
   "devDependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "terser": "^3.14.1"
+    "terser": "^4.8.1"
   },
   "jest": {
     "collectCoverageFrom": [
