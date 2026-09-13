@@ -9,6 +9,10 @@
 }
 
 .logo_container {
+    border: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
     width: 4rem;
     border-left: 1px solid #fff;
     display: flex;

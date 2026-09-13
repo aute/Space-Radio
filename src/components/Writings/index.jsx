@@ -40,29 +40,24 @@ export default function Writings({ onBack }) {
                   <div>
                     <h2>林盛文</h2>
                     <p>
-                      奥斯陆建筑与设计学院，多媒体艺术
+                      奥斯陆建筑与设计学院
                       <br />
-                      硕士在读
+                      多媒体艺术
                     </p>
-                    <p>邮箱：XXXXX</p>
-                    <p>ins等社交网络链接 icon</p>
                   </div>
                   <div>
                     <h2>敖特</h2>
                     <p>
-                      某科技公司，前端开发 & 用户体验
+                      林盛文的朋友
                       <br />
-                      研发经理
+                      不务正业的程序员
                     </p>
-                    <p>邮箱：no.at@live.com</p>
-                    <p>ins等社交网络链接 icon</p>
                   </div>
                 </div>
               </section>
               <section>
                 <h1>其他</h1>
                 <p>
-                  -
                   由于挪威与中国之间距离遥远，超过理论所能覆盖最大通讯范围，因此林盛文与敖特从未通过他们的网站取得联系
                 </p>
               </section>

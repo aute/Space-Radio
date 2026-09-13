@@ -56,3 +56,53 @@ it('shows newest messages first and removes listeners on unmount', () => {
   view.unmount();
   expect(socket.off).toHaveBeenCalledWith('hello', expect.any(Function));
 });
+
+it('requires five logo clicks within a short window and resets the gesture', () => {
+  vi.useFakeTimers();
+  try {
+    const onPreview = vi.fn();
+    render(<Header menuOpen={false} onChange={() => {}} onPreview={onPreview} />);
+    const logo = screen.getByRole('button', { name: 'Space Radio' });
+    for (let i = 0; i < 4; i++) fireEvent.click(logo);
+    expect(onPreview).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(3100);
+    fireEvent.click(logo);
+    expect(onPreview).not.toHaveBeenCalled();
+    for (let i = 0; i < 4; i++) fireEvent.click(logo);
+    expect(onPreview).toHaveBeenCalledOnce();
+    fireEvent.click(logo);
+    expect(onPreview).toHaveBeenCalledOnce();
+  } finally { vi.useRealTimers(); }
+});
+
+it('shows the next pass on a blocked send, preserves the draft and restarts auto-dismiss', () => {
+  vi.useFakeTimers();
+  try {
+    const socket = { emit: vi.fn() };
+    const pass = { risetime: new Date(2026, 8, 14, 16, 11, 11).getTime() / 1000 };
+    const view = render(<InputSend usable={false} socket={socket} nextPass={pass} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'draft' } });
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByRole('status')).toHaveTextContent('当前无法发送');
+    expect(screen.getByRole('status')).toHaveTextContent('16:11:11');
+    expect(screen.getByRole('textbox')).toHaveValue('draft');
+    expect(socket.emit).not.toHaveBeenCalled();
+    act(() => vi.advanceTimersByTime(3000));
+    fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+    act(() => vi.advanceTimersByTime(1500));
+    expect(screen.getByRole('status')).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(2500));
+    expect(screen.queryByRole('status')).toBeNull();
+    view.unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  } finally { vi.useRealTimers(); }
+});
+
+it('handles missing forecasts and clears the notice as reception becomes available', () => {
+  const socket = { emit: vi.fn() };
+  const view = render(<InputSend usable={false} socket={socket} />);
+  fireEvent.click(screen.getByRole('button'));
+  expect(screen.getByRole('status')).toHaveTextContent('下一次过境时间暂不可用');
+  view.rerender(<InputSend usable socket={socket} />);
+  expect(screen.queryByRole('status')).toBeNull();
+});

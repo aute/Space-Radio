@@ -12,7 +12,8 @@ implementation details are not.
 1. The original entry screen waits for location and satellite position. Clicking its
    arrow unlocks browser audio and reveals the radio. Development and production use
    this same flow. Failures show recovery text and Retry only in the error state.
-2. Sky gradients follow the existing hour rule. The header, sliding menu, story/back
+2. Sky gradients now follow continuous solar elevation as specified in [sky.md](sky.md).
+   The header, sliding menu, story/back
    view, sidebar, and rolling distance digits retain their existing styles.
 3. Coordinates retain degrees/minutes/seconds and hemisphere suffixes. Forecasts use
    local `AM/PM hh:mm:ss`. Missing forecasts show a neutral time placeholder instead

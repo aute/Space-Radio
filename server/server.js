@@ -21,6 +21,18 @@ function createRadioServer(options = {}) {
   const app = new Koa();
   const orbit = options.orbit || createOrbitService();
   app.use(async (ctx, next) => {
+    if (ctx.path === "/api/iss/position") {
+      const time = Number(ctx.query.time);
+      // Bound rehearsal propagation to the same two-day forecast horizon.
+      if (typeof ctx.query.time !== "string" || !ctx.query.time.trim() || !Number.isFinite(time) || Math.abs(time - Date.now()) > 2 * 86400000) {
+        ctx.status = 400;
+        ctx.body = { error: "Invalid prediction time" };
+        return;
+      }
+      try { ctx.body = await orbit.position(time); }
+      catch { ctx.status = 503; ctx.body = { error: "ISS prediction unavailable" }; }
+      return;
+    }
     if (ctx.path === "/api/iss/passes") {
       const { lat: rawLat, lon: rawLon } = ctx.query;
       const lat = Number(rawLat);

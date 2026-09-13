@@ -1,128 +1,91 @@
-
 .circleContainer {
-    z-index: 1;
-    position: absolute;
-  }
-  .circleContainer.passing::before {
-    content:'ISS';
-    padding-left: 12px;
-  }
-  
-  .circleContainer .circle {
-    display: none;
-  }
-  
-  .passing.circleContainer {
-    width: 24px;
-    height: 24px;
-    animation-iteration-count: 1;
-    animation-name: move-frames;
-  }
-  
-  .passing.circleContainer .circle {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 80%;
-    mix-blend-mode: screen;
-    background-image: radial-gradient(#fff, #fff 5%, rgba(227, 254, 255, 0) 20%);
-    animation-iteration-count: infinite, 1;
-    animation-name: fade-frames, scale-frames;
-  }
-  .foucs{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url(/foucs.svg);
-    background-size:100% 100%;
-    animation:rotate 6s linear infinite;
-  }
-  
-  @keyframes fade-frames {
-    0% {
-      opacity: 1;
-    }
-  
-    13% {
-      opacity: 0.8;
-    }
-  
-    18% {
-      opacity: 0.5;
-    }
-  
-    22% {
-      opacity: 0.6;
-    }
-  
-    39% {
-      opacity: 0.8;
-    }
-  
-    60% {
-      opacity: 0.7;
-    }
-  
-    71% {
-      opacity: 0.5;
-    }
-  
-    77% {
-      opacity: 0.9;
-    }
-  
-    82% {
-      opacity: 0.7;
-    }
-  
-    90% {
-      opacity: 1;
-    }
-  
-    94% {
-      opacity: 0.8;
-    }
-  
-    100% {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes scale-frames {
-    0% {
-      transform: scale3d(0.4, 0.4, 8);
-    }
-  
-    50% {
-      transform: scale3d(2.2, 2.2, 1);
-    }
-  
-    100% {
-      transform: scale3d(0.4, 0.4, 1);
-    }
-  }
-  
-  @keyframes move-frames {
-    from {
-      transform: translate3d(50vw, calc(100vh + 48px), 0);
-    }
-  
-    to {
-      transform: translate3d(30vw, calc(0vh - 48px), 0);
-    }
-  }
-  
-  @keyframes rotate {
-    0%{-webkit-transform:rotate(0deg);}
-   
-          25%{-webkit-transform:rotate(90deg);}
-   
-          50%{-webkit-transform:rotate(180deg);}
-   
-          75%{-webkit-transform:rotate(270deg);}
-   
-          100%{-webkit-transform:rotate(360deg);}
-  }
-  
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transform: translate3d(50vw, calc(100vh + 12px), 0);
+}
+
+.label {
+  position: absolute;
+  left: 26px;
+  top: -9px;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  opacity: 0.65;
+  text-shadow: 0 0 6px rgb(211 234 255 / 24%);
+}
+
+.core, .halo, .focus, .trail {
+  position: absolute;
+  display: block;
+}
+
+.core {
+  left: 10px;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffef7 0%, #f6fcff 30%, rgb(223 244 255 / 65%) 58%, transparent 75%);
+  box-shadow: 0 0 5px 1px rgb(237 249 255 / 55%), 0 0 12px 2px rgb(175 220 255 / 20%);
+  animation: shimmer 5.7s ease-in-out infinite;
+}
+
+.halo {
+  width: 42px;
+  height: 42px;
+  left: -9px;
+  top: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(236 248 255 / 32%), rgb(183 222 255 / 13%) 22%, rgb(156 204 255 / 4%) 46%, transparent 70%);
+  filter: blur(1.2px);
+  animation: breathe 8.3s ease-in-out infinite;
+}
+
+.trail {
+  left: 8px;
+  top: 12px;
+  width: 8px;
+  height: 32px;
+  transform-origin: 50% 0;
+  /* Reverse the viewport-relative flight vector, including the small offscreen margins. */
+  transform: rotate(calc(-1 * atan2(20vw, calc(100vh + 60px))));
+  border-radius: 40% 40% 80% 80%;
+  background: radial-gradient(ellipse at 50% 0%, rgb(223 243 255 / 32%), rgb(191 226 255 / 12%) 25%, rgb(172 211 255 / 3%) 56%, transparent 76%);
+  filter: blur(1.1px);
+}
+
+.focus {
+  inset: 0;
+  background: url(/foucs.svg) center / 100% 100%;
+  opacity: 0.32;
+  animation: rotate 12s linear infinite;
+}
+
+/* Independent, low-amplitude envelopes avoid a regular flashing-beacon effect. */
+@keyframes shimmer {
+  0%, 100% { opacity: 0.91; }
+  17% { opacity: 0.72; }
+  29% { opacity: 0.94; }
+  48% { opacity: 0.8; }
+  63% { opacity: 1; }
+  81% { opacity: 0.77; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.75; transform: scale(0.93); }
+  42% { opacity: 1; transform: scale(1.08); }
+  73% { opacity: 0.84; transform: scale(0.98); }
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .core, .halo, .focus { animation: none; }
+}

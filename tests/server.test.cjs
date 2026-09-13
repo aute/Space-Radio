@@ -65,3 +65,17 @@ test('forecast API validates input and returns recoverable provider errors', asy
   orbit.passes = async () => { throw new Error('offline'); };
   assert.equal((await fetch(`${base}?lat=0&lon=0`)).status, 503);
 });
+
+test('page-clock position API validates times and propagates the requested timestamp', async t => {
+  const requested = [];
+  const radio = createRadioServer({ orbit: { position: async time => { requested.push(time); return { latitude: 12, longitude: 30, timestamp: time / 1000 }; } } });
+  await radio.listen(0, '127.0.0.1');
+  t.after(() => radio.close());
+  const base = `http://127.0.0.1:${radio.server.address().port}/api/iss/position`;
+  for (const query of ['', '?time=', '?time=abc', '?time=1']) assert.equal((await fetch(base + query)).status, 400);
+  const time = Date.now() + 3600000;
+  const response = await fetch(`${base}?time=${time}`);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).timestamp, time / 1000);
+  assert.deepEqual(requested, [time]);
+});

@@ -1,0 +1,22 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #10151c; color: #e7edf5; font: 14px system-ui, sans-serif; }
+main { max-width: 1280px; padding: 28px; margin: auto; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+h1 { font-size: 24px; letter-spacing: 0.08em; margin: 0 0 7px; font-weight: 500; }
+p { color: #9caabb; margin: 0; }
+input, button { font: inherit; }
+input[type=date], .sky-controls button { color: inherit; background: #202b38; border: 1px solid #354354; border-radius: 6px; padding: 8px 12px; }
+.sky-scene { position: relative; isolation: isolate; overflow: hidden; border-radius: 8px; }
+.hero { height: 360px; }
+.sky-caption { position: absolute; left: 24px; top: 20px; display: grid; gap: 6px; color: white; text-shadow: 0 1px 15px #0008; }
+.sky-caption strong { font-size: 30px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.sky-controls { display: flex; align-items: center; gap: 18px; margin: 18px 0 24px; }
+.sky-controls input { flex: 1; min-width: 0; accent-color: #a6c9e8; }
+.sky-controls span { font-variant-numeric: tabular-nums; width: 45px; }
+button { cursor: pointer; }
+.sky-swatches { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+.swatch { height: 160px; border: 0; padding: 14px; text-align: left; color: white; background: transparent; }
+.swatch > span { position: absolute; top: 12px; left: 12px; text-shadow: 0 1px 8px #0008; }
+.swatch small { display: block; margin-top: 5px; opacity: 0.75; }
+.sky-note { margin-top: 18px; line-height: 1.7; font-size: 12px; }
+@media (max-width: 700px) { main { padding: 16px; } header { align-items: start; flex-direction: column; } .hero { height: 360px; } .sky-swatches { grid-template-columns: repeat(4, 1fr); } .swatch { height: 150px; } }

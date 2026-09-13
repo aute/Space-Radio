@@ -1,138 +1,32 @@
-[class^=sky-gradient] {
+/* Typed colors animate smoothly even though the clock only samples once a second. */
+@property --sky-top { syntax: '<color>'; inherits: false; initial-value: #02040b; }
+@property --sky-upper { syntax: '<color>'; inherits: false; initial-value: #030611; }
+@property --sky-middle { syntax: '<color>'; inherits: false; initial-value: #040914; }
+@property --sky-lower { syntax: '<color>'; inherits: false; initial-value: #070e1b; }
+@property --sky-horizon { syntax: '<color>'; inherits: false; initial-value: #0a1120; }
+
+.sky-background {
   position: absolute;
-  width: 100%;
-  height: 100vh;
-  z-index: -1;
-}
-[class^=sky-gradient]:after {
-  content:'';
-  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #02040b;
+  background-image: linear-gradient(to bottom in oklab,
+    var(--sky-top) 0%,
+    var(--sky-upper) 38%,
+    var(--sky-middle) 68%,
+    var(--sky-lower) 88%,
+    var(--sky-horizon) 100%);
+  transition:
+    --sky-top var(--sky-transition, 1s) linear,
+    --sky-upper var(--sky-transition, 1s) linear,
+    --sky-middle var(--sky-transition, 1s) linear,
+    --sky-lower var(--sky-transition, 1s) linear,
+    --sky-horizon var(--sky-transition, 1s) linear;
 }
 
-@keyframes next_odd {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes next_even {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.sky-gradient-0:after,
-.sky-gradient-2:after,
-.sky-gradient-4:after,
-.sky-gradient-6:after,
-.sky-gradient-8:after,
-.sky-gradient-10:after,
-.sky-gradient-12:after,
-.sky-gradient-14:after,
-.sky-gradient-16:after,
-.sky-gradient-18:after,
-.sky-gradient-20:after,
-.sky-gradient-22:after,
-.sky-gradient-24:after {
-  animation: next_even 2250s;
-}
-
-.sky-gradient-1:after,
-.sky-gradient-3:after,
-.sky-gradient-5:after,
-.sky-gradient-7:after,
-.sky-gradient-9:after,
-.sky-gradient-11:after,
-.sky-gradient-13:after,
-.sky-gradient-15:after,
-.sky-gradient-17:after,
-.sky-gradient-19:after,
-.sky-gradient-21:after,
-.sky-gradient-23:after {
-  animation: next_odd 2250s;
-}
-
-
-.sky-gradient-22:after,
-.sky-gradient-23,
-.sky-gradient-23:after,
-.sky-gradient-24,
-.sky-gradient-24:after,
-.sky-gradient-0,
-.sky-gradient-0:after,
-.sky-gradient-1 {
-  background: linear-gradient(to bottom, #0E104F 20%, #2738A2 100%);
-}
-
-.sky-gradient-1:after,
-.sky-gradient-2,
-.sky-gradient-2:after,
-.sky-gradient-3,
-.sky-gradient-3:after,
-.sky-gradient-4 {
-  background: linear-gradient(to bottom, #0F2372 20%, #942D45 100%);
-}
-
-.sky-gradient-4:after,
-.sky-gradient-5,
-.sky-gradient-5:after,
-.sky-gradient-6,
-.sky-gradient-6:after,
-.sky-gradient-7 {
-  background: linear-gradient(to bottom, #252B8D 0%, #C779B7 100%);
-}
-
-.sky-gradient-7:after,
-.sky-gradient-8,
-.sky-gradient-8:after,
-.sky-gradient-9,
-.sky-gradient-9:after,
-.sky-gradient-10 {
-  background: linear-gradient(to bottom, #3383E0 20%, #D6A3C4 100%);
-}
-
-.sky-gradient-10:after,
-.sky-gradient-11,
-.sky-gradient-11:after,
-.sky-gradient-12,
-.sky-gradient-12:after,
-.sky-gradient-13 {
-  background: linear-gradient(to bottom, #398CDF 0%, #77D7FD 100%);
-}
-
-.sky-gradient-13:after,
-.sky-gradient-14,
-.sky-gradient-14:after,
-.sky-gradient-15,
-.sky-gradient-15:after,
-.sky-gradient-16 {
-  background: linear-gradient(to bottom, #348CEC 20%, #D9DBCA 100%);
-}
-
-.sky-gradient-16:after,
-.sky-gradient-17,
-.sky-gradient-17:after,
-.sky-gradient-18,
-.sky-gradient-18:after,
-.sky-gradient-19 {
-  background: linear-gradient(to bottom, #1B58CA 0%, #F3B284 100%);
-}
-
-.sky-gradient-19:after,
-.sky-gradient-20,
-.sky-gradient-20:after,
-.sky-gradient-21,
-.sky-gradient-21:after,
-.sky-gradient-22 {
-  background: linear-gradient(to bottom, #081460 20%, #813B0E 100%);
+@media (prefers-reduced-motion: reduce) {
+  .sky-background { transition: none; }
 }

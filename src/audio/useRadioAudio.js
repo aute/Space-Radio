@@ -1,18 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Noise, Player, start } from 'tone';
+import { audioAdapter } from './adapter';
 import { AudioController } from './controller';
 
-const adapter = {
-  unlock: start,
-  createNoise: () => new Noise('pink').toDestination(),
-  createPlayer: onstop => new Player({ onstop }).toDestination(),
-};
-
-export function useRadioAudio(distance, playlist) {
-  const [engine] = useState(() => new AudioController(adapter));
+export function useRadioAudio(distance, playlist, passProgress, playbackSession) {
+  const [engine] = useState(() => new AudioController(audioAdapter));
   const [started, setStarted] = useState(false);
   const [error, setError] = useState('');
-  useEffect(() => { engine.update(distance, playlist); }, [engine, distance, playlist]);
+  useEffect(() => { engine.update(distance, playlist, passProgress, playbackSession); }, [engine, distance, playlist, passProgress, playbackSession]);
   useEffect(() => () => engine.dispose(), [engine]);
   const begin = useCallback(async () => {
     try {

@@ -39,3 +39,12 @@ test('a current pass retains its actual rise time when opened midway through it'
   const [active] = await orbit.passes(31.17, 121.45);
   assert.ok(Math.abs(active.risetime - first.risetime) <= 1);
 });
+
+test('rehearsal propagation uses the requested date without moving the service clock', async () => {
+  const orbit = createOrbitService({ now: () => now, fetchTle: async () => tle });
+  const live = await orbit.position();
+  const future = await orbit.position(now + 3600000);
+  assert.equal(future.timestamp, (now + 3600000) / 1000);
+  assert.notEqual(future.longitude, live.longitude);
+  assert.deepEqual(await orbit.position(), live);
+});

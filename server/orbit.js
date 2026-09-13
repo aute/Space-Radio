@@ -75,9 +75,8 @@ function createOrbitService({ now = Date.now, fetchTle = downloadTle } = {}) {
   }
 
   return {
-    async position() {
+    async position(time = now()) {
       const record = await getRecord();
-      const time = now();
       const gd = satellite.eciToGeodetic(propagate(record, time), satellite.gstime(new Date(time)));
       return { latitude: satellite.degreesLat(gd.latitude), longitude: satellite.degreesLong(gd.longitude), timestamp: Math.floor(time / 1000) };
     },

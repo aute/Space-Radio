@@ -42,7 +42,8 @@ runs clean installation, tests, and the production build on Node 24.
 
 ## Preserved experience
 
-- Original CSS layout, sky gradients, logos, menu labels, story, and music files.
+- Original CSS layout, logos, menu labels, story, and music files.
+- A clear-sky gradient following solar elevation, smoothly interpolated through the day.
 - Original rolling number animation, coordinate typography, and local AM/PM times.
 - Pink noise and the original distance-volume curves; music within 2250 km.
 - Ten-degree elevation pass windows and newest-first messages while passing.
@@ -87,3 +88,38 @@ In its browser console, `radioFixture.leaveCoverage()` and
 `radioFixture.reenterCoverage()` control the test scenario.
 
 See [the behavior specification and verification notes](doc/modernization.md).
+
+## Clear-sky preview
+
+`node scripts/preview-fixture.js --sky` opens a separate time-scrubbing preview at
+http://localhost:3100. It shows a full day in Shanghai on a chosen date; Play runs
+24 hours in two minutes. These controls do not appear in the radio.
+The live background uses the viewer's coordinates and actual date, with continuous
+Oklab interpolation and one-second clock samples. It contains no stars or clouds.
+See [the sky specification](doc/sky.md).
+
+## Radio audio preview
+
+`node scripts/preview-fixture.js --audio` opens an A/B listening page at
+http://localhost:3102. Compare the original pink noise with the new receiver texture,
+change distance, and enable 12-second music excerpts to hear consecutive crossfades.
+The production UI is unchanged. Reception blends the distance curve with pass
+progress: interference fades through the first quarter and returns in the last. The player
+preloads one successor, uses 1.6-second overlaps, smooths distance gain changes,
+and fades out on coverage exit. See [the audio specification](doc/audio.md).
+
+## ISS light preview
+
+`node scripts/preview-fixture.js --iss` opens a 30-second pass preview at
+http://localhost:3103 with night, dawn, and daytime skies. The marker adds a soft
+halo, gentle shimmer, and a short fading trail. See [the appearance specification](doc/iss-appearance.md).
+
+## Rehearse a pass on the real page
+
+After entering the radio, click the upper-right logo five times within three
+seconds. This page jumps to ten seconds before the next predicted ISS pass, then
+advances at normal speed. The sky, marker and audio distance follow the page clock;
+positions are propagated from the backend's real orbital elements. The computer
+clock is untouched. Refresh to return to live time. Rehearsal adds no visible status or controls. Test-mode
+messages appear on this page only; refreshing restores live messaging.
+See [the page-clock specification](doc/page-clock.md).

@@ -18,3 +18,11 @@ export async function getPasses({ lat, lng }, signal) {
   if (!Array.isArray(data.response)) throw new Error('Invalid ISS forecast response.');
   return data.response;
 }
+
+export async function getPositionAt(time, signal) {
+  const response = await fetch(`/api/iss/position?time=${Math.round(time)}`, {
+    signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
+  });
+  if (!response.ok) throw new Error('无法获取测试时刻的 ISS 位置，请稍后重试或恢复实时。');
+  return response.json();
+}

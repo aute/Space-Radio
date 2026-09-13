@@ -1,0 +1,13 @@
+:root { color-scheme: dark; font: 16px/1.6 system-ui, sans-serif; background: #091522; color: #e5ecf3; }
+body { margin: 0; }
+main { max-width: 680px; margin: 9vh auto; padding: 28px; }
+h1 { font-size: 34px; font-weight: 500; margin: 12px 0; }
+p { color: #a5b9cc; }
+.eyebrow { letter-spacing: .16em; font-size: 12px; color: #78b5d9; }
+.buttons { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
+button { font: inherit; border: 1px solid #385066; background: #15293a; color: #e5ecf3; padding: 10px 22px; border-radius: 8px; cursor: pointer; }
+button[aria-pressed="true"] { border-color: #9bd4f4; background: #234960; }
+input[type="range"] { display: block; width: 100%; margin: 20px 0; accent-color: #8fcbe9; }
+.music { display: block; margin-top: 30px; }
+.music input { margin-right: 10px; }
+.hint { font-size: 14px; margin-top: 30px; }
