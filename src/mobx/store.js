@@ -1,109 +1,122 @@
-import { observable, action, computed } from "mobx";
-import io from "socket.io-client";
-import { GetISSDistance } from "../utils";
-import { getLoca, getIssPass } from "../api";
+import { makeAutoObservable, runInAction } from 'mobx';
+import { io } from 'socket.io-client';
+import { getLocation, getPasses } from '../api';
+import { radioDistance, validCoordinates } from '../../shared/radio.cjs';
 
-class issStore {
-  @observable loca_lat = 0;
-  @observable loca_lng = 0;
-  @observable iss_lat = 0;
-  @observable iss_lng = 0;
-  @observable risetime = [];
-  @observable duration = [];
-  @observable risetimObsolete = false
-  @observable iss_passing = false;
+export class RadioStore {
+  location = null;
+  position = null;
+  passes = [];
+  playlist = [];
+  error = '';
+  connected = false;
+  time = 0;
+  generation = 0;
+  active = false;
+  timer = null;
+  request = null;
+  nextForecast = 0;
 
-  constructor() {
-    this.socket = io();
-    this.init();
+  constructor({ socket = io({ autoConnect: false }), locate = getLocation, forecast = getPasses, now = Date.now } = {}) {
+    this.socket = socket;
+    this.locate = locate;
+    this.forecast = forecast;
+    this.now = now;
+    makeAutoObservable(this, {
+      socket: false, locate: false, forecast: false, now: false,
+      timer: false, request: false, generation: false, active: false, nextForecast: false,
+    }, { autoBind: true });
   }
 
-  @action init = async () => {
-    const loca = await getLoca();
-    this.LocaChange({
-      loca_lat: loca.lat,
-      loca_lng: loca.lng
-    });
-    await this.ISSPassInfoChange();
-    this.socket.on("issPositionChange", data => {
-      this.ISSPositionChange({
-        iss_lat: data.latitude,
-        iss_lng: data.longitude
+  get ready() { return this.location !== null && this.position !== null; }
+  get distance() {
+    return this.ready ? radioDistance(this.location.lat, this.location.lng, this.position.latitude, this.position.longitude) : null;
+  }
+  get activePass() { return this.passes.find(pass => pass.risetime * 1000 <= this.time && (pass.risetime + pass.duration) * 1000 > this.time); }
+  get passing() { return this.connected && Boolean(this.activePass); }
+  get nextPass() { return this.passes.find(pass => pass.risetime * 1000 > this.time); }
+
+  onConnect() {
+    this.connected = true;
+    if (this.location) this.socket.emit('join', { ...this.location });
+  }
+  onDisconnect() { this.connected = false; }
+  onPosition(data) {
+    const latitude = Number(data?.latitude);
+    const longitude = Number(data?.longitude);
+    if (validCoordinates(latitude, longitude)) this.position = { latitude, longitude };
+    this.tick();
+  }
+  onPlaylist(list) {
+    if (Array.isArray(list)) this.playlist = list.filter(item => typeof item === 'string' && /^\.\/musicList\/[^?#]+\.mp3$/i.test(item));
+  }
+  tick() {
+    this.time = this.now();
+    if (this.location && !this.request && this.time >= this.nextForecast) void this.refreshForecast();
+  }
+
+  async start() {
+    if (this.active) return;
+    this.active = true;
+    const generation = ++this.generation;
+    this.time = this.now();
+    this.error = '';
+    // Subscribe before location/forecast requests so failures cannot block positions.
+    this.socket.on('connect', this.onConnect);
+    this.socket.on('disconnect', this.onDisconnect);
+    this.socket.on('issPositionChange', this.onPosition);
+    this.socket.on('playList', this.onPlaylist);
+    this.socket.connect();
+    this.timer = setInterval(this.tick, 1000);
+    try {
+      const location = await this.locate();
+      if (!this.active || generation !== this.generation) return;
+      if (!validCoordinates(location.lat, location.lng)) throw new Error('Invalid location. Please retry.');
+      runInAction(() => {
+        this.location = location;
+        this.socket.emit('join', { ...location });
       });
-      this.ISSPassingChange();
-    });
-  };
-
-  @action
-  LocaChange = payload => {
-    this.loca_lat = payload.loca_lat;
-    this.loca_lng = payload.loca_lng;
-    this.socket.emit("join", {
-      lat: this.loca_lat,
-      lng: this.loca_lng
-    });
-  };
-  @action
-  ISSPositionChange = payload => {
-    this.iss_lat = payload.iss_lat;
-    this.iss_lng = payload.iss_lng;
-  };
-  @action
-  ISSPassInfoChange = async () => {
-    const IssPassInfo = await getIssPass({
-      loca_lat: this.loca_lat,
-      loca_lng: this.loca_lng
-    });
-    let duration = []
-    let risetime = []
-    IssPassInfo.response.map(i => {
-      duration.push(i.duration * 1000)
-      risetime.push(i.risetime * 1000)
-      return i
-    })
-    this.risetime = risetime;
-    this.duration = duration;
-    this.risetimObsolete = false
-  };
-  @action
-  ISSPassingChange = () => {
-    let now = Date.now();
-    this.iss_passing =
-      this.risetime[0] - now < 0 &&
-      this.risetime[0] + this.duration[0] - now > 0;
-    if (this.iss_passing && !this.risetimObsolete) {
-      this.risetimObsolete = true
+      await this.refreshForecast();
+    } catch (error) {
+      if (this.active && generation === this.generation) runInAction(() => { this.error = error.message; });
     }
-    // 接口有 BUG 在 ISS 经过当时请求之后的经过事件列表，返回信息缺少即将到来的最近一项，故做此处理
-    if (now - (this.risetime[0] + this.duration[0]) > 1000 * 30) {
-      this.ISSPassInfoChange()
-    }
-  };
-
-  @computed get ISStoreInit() {
-    return this.loca_lat * this.loca_lng * this.iss_lat * this.iss_lng;
-  }
-  @computed get ISSDistance() {
-    return this.ISStoreInit
-      ? GetISSDistance(
-          this.loca_lat,
-          this.loca_lng,
-          this.iss_lat,
-          this.iss_lng
-        ).toFixed(2)
-      : 0;
   }
 
-  // @computed get ISSPassing() {
-  //     return this.ISStoreInit
-  //     ? this.risetime - new Date() < 0
-  //     : false;
-  // }
-}
-class uiStore {
-  @observable menuOpen = false;
-}
-const ISSStore = new issStore();
-const UItore = new uiStore();
+  async refreshForecast() {
+    if (!this.location || this.request || !this.active) return;
+    const request = new AbortController();
+    const generation = this.generation;
+    this.request = request;
+    try {
+      const passes = await this.forecast(this.location, request.signal);
+      if (!this.active || generation !== this.generation) return;
+      runInAction(() => {
+        this.passes = passes.filter(pass => Number.isFinite(pass.risetime) && Number.isFinite(pass.duration) && pass.duration > 0);
+        this.error = '';
+        this.nextForecast = Math.min(this.now() + 300000, ...this.passes.map(pass => (pass.risetime + pass.duration) * 1000 + 1000).filter(end => end > this.now()));
+      });
+    } catch (error) {
+      if (this.active && generation === this.generation && !request.signal.aborted) runInAction(() => {
+        this.error = error.message;
+        this.nextForecast = this.now() + 30000;
+      });
+    } finally {
+      if (this.request === request) this.request = null;
+    }
+  }
 
-export { ISSStore, UItore };
+  retry() { this.stop(); return this.start(); }
+  stop() {
+    this.active = false;
+    this.generation++;
+    clearInterval(this.timer);
+    this.request?.abort();
+    this.request = null;
+    this.socket.off('connect', this.onConnect);
+    this.socket.off('disconnect', this.onDisconnect);
+    this.socket.off('issPositionChange', this.onPosition);
+    this.socket.off('playList', this.onPlaylist);
+    this.socket.disconnect();
+    this.connected = false;
+  }
+}

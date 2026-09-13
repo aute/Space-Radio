@@ -111,3 +111,7 @@
     opacity: 1;
     transition: opacity 0.4s; 
 }
+
+/* Error recovery is shown only when initialization needs user action. */
+.loading-error { position: absolute; top: 100%; margin-top: 1rem; white-space: normal; font-size: 0.8rem; max-width: 32rem; }
+.loading-error button { color: inherit; background: transparent; border: 1px solid currentColor; cursor: pointer; }

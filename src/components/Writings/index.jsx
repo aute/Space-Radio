@@ -1,18 +1,6 @@
-import React, { Component } from "react";
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
-class Writings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      type: ""
-    };
-  }
-  componentDidMount() {}
-  onBack = () => {
-    this.props.onBack();
-  };
-  render() {
+export default function Writings({ onBack }) {
     return (
       <div className={styles.Writings_wapper}>
         <div className={styles.Writings}>
@@ -82,12 +70,9 @@ class Writings extends Component {
           </div>
           <h1
             style={{ textAlign: "right", cursor: "pointer", margin: '1rem 0' }}
-            onClick={this.onBack}
+            onClick={onBack}
           >{`<-`}</h1>
         </div>
       </div>
     );
-  }
 }
-
-export default Writings;

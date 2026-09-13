@@ -1,42 +1,89 @@
-## Available Scripts
+# Space Radio
 
-In the project directory, you can run:
+An ISS-inspired radio: a changing sky, satellite passes, distance-controlled music
+and pink noise, and messages shared while the station is overhead.
 
-### `npm start`
+## Run locally
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Use **Node 24** (`.nvmrc`), then:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```sh
+npm ci
+npm start
+```
 
-### `npm test`
+Open http://localhost:3000, allow location access, and press the original arrow
+button to start audio. The development page now uses the same entry screen as
+production, so browser audio permissions work consistently.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`npm start` runs the frontend and backend together; Ctrl+C closes both. The backend
+uses port 3001. HTTP API calls and Socket.IO are proxied through the frontend.
+For different ports: `PORT=3200 API_PORT=3201 npm start`.
+Both listeners default to loopback; use `HOST=0.0.0.0` explicitly for LAN access.
+Browser location access requires HTTPS outside localhost.
 
-### `npm run build`
+## Verify and build
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+npm test
+npm run build
+npm run serve
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Production assets stay in `build/`, including all original logos, images, and music.
+`npm run serve` serves the app and Socket.IO at http://localhost:3001; `PORT` and
+`HOST` configure this listener. Deploy frontend and backend together behind an
+HTTPS reverse proxy that forwards `/api` and `/socket.io`, including WebSocket
+upgrades. The app is designed for deployment at the origin root.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Tests use Node's test runner, Vitest, jsdom, and React Testing Library. GitHub Actions
+runs clean installation, tests, and the production build on Node 24.
+`package-lock.json` is the only package lockfile; use npm.
 
-### `npm run eject`
+## Preserved experience
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Original CSS layout, sky gradients, logos, menu labels, story, and music files.
+- Original rolling number animation, coordinate typography, and local AM/PM times.
+- Pink noise and the original distance-volume curves; music within 2250 km.
+- Ten-degree elevation pass windows and newest-first messages while passing.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The internals use React 19 function components, MobX 6 without decorators, Tone 15,
+Socket.IO 4, Koa 3, Webpack 5, and the current Babel pipeline. The small Odometer
+renderer is intentionally isolated in `ForecastBoard` to preserve its exact
+animation. JSONP, the embedded Tencent key/script, Moment, obsolete CRA scaffolding,
+and duplicate socket connections have been removed.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Orbital data
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The retired Open Notify prediction API is replaced by local SGP4 calculations using
+Satellite.js and real ISS TLE elements. Elements are downloaded over HTTPS from
+CelesTrak, with Where the ISS at as a fallback. They are refreshed every six hours;
+requests share the refresh and predictions are cached briefly. Elements older than
+seven days are rejected. No artificial positions or passes are used in production.
 
-## Learn More
+The backend uses the same orbit for live coordinates and pass forecasts, preserving
+the original 10° pass threshold. It searches the next 48 hours and returns up to five
+passes, including a pass currently in progress. Extreme latitudes may have none.
+Predictions are estimates and can shift after station maneuvers or refreshed elements.
+The displayed distance keeps the original 350 km artistic altitude model rather
+than changing the sound design to track altitude variations.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Position updates and playlist delivery no longer wait for successful forecasts.
+Initialization failures offer Retry; failed forecasts retry in the background.
+Disconnected sockets, abandoned location requests, timers, and audio nodes are cleaned
+up. Zero latitude/longitude are valid locations. Music stops outside coverage and
+tracks are shuffled without repeating until the playlist is exhausted.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Browser regression fixture
+
+```sh
+node scripts/preview-fixture.js
+```
+
+http://localhost:3100 is a **test-only** page with controlled position/pass events
+and real audio playback. It is excluded from production builds. It can exercise
+sending messages and audio transitions without waiting for an actual ISS pass.
+In its browser console, `radioFixture.leaveCoverage()` and
+`radioFixture.reenterCoverage()` control the test scenario.
+
+See [the behavior specification and verification notes](doc/modernization.md).
